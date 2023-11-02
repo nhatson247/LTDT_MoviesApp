@@ -1,103 +1,90 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testing/data/movie.dart';
+import 'package:testing/models/movie.dart';
 import 'package:testing/screens/details_screen.dart';
+import '../constants.dart';
 
 class CustomCardNormal extends StatelessWidget {
-  MovieModel movieModel;
+  final Movie movie;
 
-  CustomCardNormal({super.key, required this.movieModel});
+  const CustomCardNormal({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const DetailsScreen())
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const DetailsScreen()),
         );
       },
-      child: Stack(
+      child: Column(
         children: [
           Container(
-            height: 200,
-            width: 140,
-            margin: const EdgeInsets.symmetric(horizontal: 8),
+            height: 150,
+            width: 250,
+            margin: const EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: AssetImage(movieModel.imageAsset!),
+                image:
+                NetworkImage('${Constanst.imagePath}${movie.backDropPath}'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          Positioned(
-            left: 15,
-            right: 15,
-            bottom: 0,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        movieModel.movieName!,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: CupertinoColors.white,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        movieModel.year!,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white38,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      movieModel.movieRating!,
-                      maxLines: 1,
-                      overflow: TextOverflow.clip,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: CupertinoColors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    const Icon(
-                      Icons.star,
-                      size: 14,
-                      color: Colors.yellow,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    )
-                  ],
-                )
-              ],
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            movie.title,
+            maxLines: 1,
+            style: const TextStyle(
+              fontSize: 16,
+              color: CupertinoColors.white,
+              fontWeight: FontWeight.w700,
             ),
+          ),
+          Row(
+            children: [
+              Text(
+                movie.releaseDate,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white54,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(width: 100,),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.star,
+                    size: 18,
+                    color: Colors.redAccent,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    movie.voteAverage.toStringAsFixed(1),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: CupertinoColors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "/10",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: CupertinoColors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

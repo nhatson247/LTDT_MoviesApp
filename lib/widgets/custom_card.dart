@@ -1,29 +1,40 @@
 import 'package:flutter/cupertino.dart';
-import 'package:testing/utils/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:testing/screens/details_screen.dart';
+
+import '../constants.dart';
+import '../models/movie.dart';
 
 class CustomCard extends StatelessWidget {
-  String imageAsset;
-  CustomCard({super.key,required this.imageAsset});
+  final Movie movie;
+  CustomCard({super.key,required this.movie});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color:  kButtonColor.withOpacity(0.25),
-            blurRadius: 5,
-            spreadRadius: 1,
-            offset: const Offset(0,3)
-          )
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const DetailsScreen()),
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            height: 150,
+            width: 250,
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image:
+                NetworkImage('${Constanst.imagePath}${movie.backDropPath}'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
         ],
-        borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-             image: AssetImage(imageAsset),
-             fit: BoxFit.cover,
-        ),
       ),
-      margin: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 30),
     );
   }
 }

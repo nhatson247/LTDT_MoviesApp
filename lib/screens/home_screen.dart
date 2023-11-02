@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/utils/colors.dart';
-import 'package:testing/data/movie.dart';
-import 'package:testing/widgets/custom_card.dart';
 import 'package:testing/widgets/custom_card_normal.dart';
+import '../api/api.dart';
+import '../constants.dart';
+import '../models/movie.dart';
+import '../widgets/custom_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,28 +17,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //items
-  List<MovieModel> foryouItemsList = List.of(forYouImages);
-  List<MovieModel> popularItemsList = List.of(popularImages);
-  List<MovieModel> genresItemsList = List.of(genresList);
-  List<MovieModel> legendaryItemsList = List.of(legendaryImages);
+  late Future<List<Movie>> trendingMovies;
+  late Future<List<Movie>> toprateMovies;
+  late Future<List<Movie>> upcomingMovies;
+  late Future<List<Movie>> nowplayingMovies;
 
-  PageController pageController =
-      PageController(initialPage: 0, viewportFraction: 0.9);
+  @override
+  void initState() {
+    super.initState();
+    trendingMovies = Api().getTrengdingMovies();
+    toprateMovies = Api().getTopRatedMovies();
+    upcomingMovies = Api().getUpComingMovies();
+    nowplayingMovies = Api().getNowplayingMovies();
+  }
 
   int currentPage = 0;
 
   List tabBarIcons = [
     Icons.home,
-    Icons.ondemand_video_rounded,
-    Icons.video_collection,
-    Icons.account_box_outlined,
+    Icons.play_circle_outline,
+    Icons.bookmark,
+    Icons.person,
   ];
 
   // control của thẻ card
   List<Widget> PageControlerWidget() {
     List<Widget> list = [];
-    for (int i = 0; i < foryouItemsList.length; i++) {
+    for (int i = 0; i < 5; i++) {
       list.add(i == currentPage ? _indicator(true) : _indicator(false));
     }
     return list;
@@ -57,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    pageController.dispose();
     super.dispose();
   }
 
@@ -115,13 +121,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   // phan search
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Container(
-                      padding: const EdgeInsets.all(20), // can 2 ben
+                      padding: const EdgeInsets.all(10), // can 2 ben
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(30)),
@@ -146,11 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                     child: Text(
                       "Trending Movies",
                       style: TextStyle(
@@ -160,7 +163,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  foryoucardsLayout(forYouImages),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  FutureBuilder<List<Movie>>(
+                    future: trendingMovies,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else if (snapshot.hasData) {
+                        return TrendingCardsLayout(snapshot);
+                      } else {
+                        return const Center(
+                          child: Text("No data available"),
+                        );
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Align(
                     alignment: Alignment.center,
                     child: Row(
@@ -168,29 +196,29 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: PageControlerWidget(),
                     ),
                   ),
-                  // Nổi bật
+                  // Top
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 30),
+                        horizontal: 10, vertical: 20),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children: [
                             Text(
-                              "Nổi Bật",
+                              "Top Rated Movies",
                               style: TextStyle(
                                 color: Colors.white54,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              "Xem tất cả",
+                              "See all",
                               style: TextStyle(
-                                color: Colors.white12,
+                                color: Colors.yellow[800],
                                 fontSize: 18,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -198,18 +226,36 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  MovieListPL(popularItemsList),
-                  // Trendding
+                  FutureBuilder<List<Movie>>(
+                    future: toprateMovies,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else if (snapshot.hasData) {
+                        return MovieListTopRated(snapshot);
+                      } else {
+                        return const Center(
+                          child: Text("No data available"),
+                        );
+                      }
+                    },
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 30),
+                        horizontal: 10, vertical: 20),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children: [
                             Text(
-                              "Huyền Thoại",
+                              "UpComing Movies",
                               style: TextStyle(
                                 color: Colors.white54,
                                 fontSize: 18,
@@ -217,11 +263,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Text(
-                              "Xem tất cả",
+                              "See all",
                               style: TextStyle(
-                                color: Colors.white12,
+                                color: Colors.yellow[800],
                                 fontSize: 18,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -229,18 +275,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  MovieListGR(genresItemsList),
+                  FutureBuilder<List<Movie>>(
+                    future: upcomingMovies,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else if (snapshot.hasData) {
+                        return MovieListUpComing(snapshot);
+                      } else {
+                        return const Center(
+                          child: Text("No data available"),
+                        );
+                      }
+                    },
+                  ),
                   //Huyền thoại
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 30),
+                        horizontal: 10, vertical: 20),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children: [
                             Text(
-                              "Hành động",
+                              "Now Playing Movies",
                               style: TextStyle(
                                 color: Colors.white54,
                                 fontSize: 18,
@@ -248,11 +313,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Text(
-                              "Xem tất cả",
+                              "See all",
                               style: TextStyle(
-                                color: Colors.white12,
+                                color: Colors.yellow[800],
                                 fontSize: 18,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -260,7 +325,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  MovieListPL(legendaryItemsList),
+                  FutureBuilder<List<Movie>>(
+                    future: nowplayingMovies,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else if (snapshot.hasData) {
+                        return MovieListUpComing(snapshot);
+                      } else {
+                        return const Center(
+                          child: Text("No data available"),
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -300,47 +384,58 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // thẻ card
-  // Widget foryoucardsLayout(List<MovieModel> movieList) {
-  //   return SizedBox(
-  //     height: MediaQuery.of(context).size.height * 0.60,
-  //     child: PageView.builder(
-  //       physics: const ClampingScrollPhysics(),
-  //       controller: pageController,
-  //       itemCount: movieList.length,
-  //       itemBuilder: (context, index) {
-  //         return CustomCard(imageAsset: movieList[index].imageAsset.toString());
-  //       },
-  //       onPageChanged: (int page) {
-  //         setState(() {
-  //           currentPage = page;
-  //         });
-  //       },
-  //     ),
-  //   );
-  // }
-
-  Widget foryoucardsLayout(List<MovieModel> movieList) {
+  Widget TrendingCardsLayout(AsyncSnapshot<List<Movie>> snapshot) {
     return SizedBox(
       child: CarouselSlider.builder(
-        itemCount: movieList.length,
+        itemCount: snapshot.data?.length ?? 0,
         options: CarouselOptions(
-          height: MediaQuery.of(context).size.height * 0.60,
-            autoPlay: true,
-            viewportFraction: 0.80,
-            enlargeCenterPage: true,
-            pageSnapping: true,
-            autoPlayCurve: Curves.fastLinearToSlowEaseIn,
-            autoPlayAnimationDuration: const Duration(seconds: 1),
-            onPageChanged: (int page, reason) {
-              setState(() {
-                currentPage = page;
-              });
-            }),
+          height: MediaQuery.of(context).size.height * 0.55,
+          autoPlay: true,
+          viewportFraction: 0.55,
+          enlargeCenterPage: true,
+          pageSnapping: true,
+          autoPlayCurve: Curves.fastLinearToSlowEaseIn,
+          autoPlayAnimationDuration: const Duration(seconds: 1),
+          onPageChanged: (int page, reason) {
+            setState(() {
+              currentPage = page;
+            });
+          },
+        ),
         itemBuilder: (context, index, page) {
-          return Container(
-            child: CustomCard(
-              imageAsset: movieList[index].imageAsset.toString(),
+          final movie = snapshot.data?[index];
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Stack(
+              children: [
+                Image.network(
+                  '${Constanst.imagePath}${movie?.posterPath}',
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height * 0.50,
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text(
+                            movie?.title ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
@@ -348,59 +443,51 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget MovieListPL(List<MovieModel> movieList) {
+  Widget MovieListTopRated(AsyncSnapshot<List<Movie>> snapshot) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-      height: MediaQuery.of(context).size.height * 0.42,
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      height: MediaQuery.of(context).size.height * 0.35,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: movieList.length,
+        itemCount: snapshot.data?.length ?? 0,
         itemBuilder: (context, index) {
-          return CustomCardNormal(movieModel: movieList[index]);
+          return CustomCardNormal(movie: snapshot.data![index]);
         },
       ),
     );
   }
 
-  Widget MovieListGR(List<MovieModel> genresList) {
+  Widget MovieListUpComing(AsyncSnapshot<List<Movie>> snapshot) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-      height: MediaQuery.of(context).size.height * 0.30,
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      height: MediaQuery.of(context).size.height * 0.25,
       child: ListView.builder(
-        itemCount: genresList.length,
-        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
+        itemCount: snapshot.data?.length ?? 0,
         itemBuilder: (context, index) {
-          return Stack(
-            children: [
-              Container(
-                width: 250,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage(
-                      genresList[index].imageAsset.toString(),
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                margin: const EdgeInsets.only(right: 15, top: 8, bottom: 25),
-              ),
-              Positioned(
-                left: 20,
-                bottom: 0,
-                child: Text(
-                  genresList[index].movieName.toString(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          );
+          return CustomCard(movie: snapshot.data![index]);
         },
+      ),
+    );
+  }
+
+  Widget PageControllerDots(int itemCount) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(itemCount, (index) {
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+            height: 8,
+            width: 8,
+            decoration: BoxDecoration(
+              color: index == currentPage ? Colors.white : Colors.white30,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          );
+        }),
       ),
     );
   }
