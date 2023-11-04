@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testing/screens/home_screen.dart';
-import 'package:testing/screens/details_screen.dart';
+import 'package:testing/homepage.dart';
 void main(){
   runApp(const MyApp());
 }
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner:  false,
       title: "Movie",
-      home: HomeScreen(),
+      home: HomePage(),
     );
   }
 }

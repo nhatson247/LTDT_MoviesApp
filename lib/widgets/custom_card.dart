@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/screens/details_screen.dart';
 
-import '../constants.dart';
+import '../api/constants.dart';
 import '../models/movie.dart';
 
 class CustomCard extends StatelessWidget {
@@ -15,7 +15,7 @@ class CustomCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const DetailsScreen()),
+          MaterialPageRoute(builder: (context) => DetailsScreen(movie: movie,)),
         );
       },
       child: Column(

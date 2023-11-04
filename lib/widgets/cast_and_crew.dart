@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:testing/api/constants.dart';
+
+import '../models/People.dart';
 
 class CastAndCrewWidget extends StatelessWidget {
-  final List casts;
+  final List<People> casts;
+
   const CastAndCrewWidget({super.key, required this.casts});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "Diễn Viên",
+            "Casts",
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
-              fontWeight: FontWeight.w300,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(
@@ -28,16 +32,16 @@ class CastAndCrewWidget extends StatelessWidget {
                 itemCount: casts.length,
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context,index){
-                return castCard(casts[index]);
-                }
-                ),
+                itemBuilder: (context, index) {
+                  return castCard(casts[index]);
+                }),
           )
         ],
       ),
     );
   }
-  Widget castCard(final Map cast){
+
+  Widget castCard(People cast) {
     return Container(
       margin: const EdgeInsets.only(right: 20),
       width: 70,
@@ -46,20 +50,18 @@ class CastAndCrewWidget extends StatelessWidget {
           Container(
             height: 100,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              image: DecorationImage(
-                  image: AssetImage(
-                    cast['image'],
-                  ),
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  image: NetworkImage('${Constanst.imagePath}${cast.profilePath}'),
                   fit: BoxFit.cover,
-              )
+                )
             ),
           ),
           const SizedBox(
             height: 10,
           ),
           Text(
-            cast['name'],
+           cast.name,
             maxLines: 2,
             textAlign: TextAlign.left,
             style: TextStyle(

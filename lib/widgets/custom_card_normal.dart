@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/models/movie.dart';
 import 'package:testing/screens/details_screen.dart';
-import '../constants.dart';
+import '../api/constants.dart';
 
 class CustomCardNormal extends StatelessWidget {
   final Movie movie;
@@ -15,7 +15,10 @@ class CustomCardNormal extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const DetailsScreen()),
+          MaterialPageRoute(
+              builder: (context) => DetailsScreen(
+                movie: movie,
+              )),
         );
       },
       child: Column(
@@ -45,17 +48,27 @@ class CustomCardNormal extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
-              Text(
-                movie.releaseDate,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white54,
-                  fontWeight: FontWeight.w500,
+              Container(
+                padding: EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.grey,
+                ),
+                child: Text(
+                  movie.releaseDate.split("-").first,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-              SizedBox(width: 100,),
+              SizedBox(width: 20,),
               Row(
                 children: [
                   const Icon(
@@ -63,22 +76,11 @@ class CustomCardNormal extends StatelessWidget {
                     size: 18,
                     color: Colors.redAccent,
                   ),
-                  SizedBox(
-                    width: 5,
-                  ),
                   Text(
                     movie.voteAverage.toStringAsFixed(1),
                     style: const TextStyle(
                       fontSize: 18,
-                      color: CupertinoColors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    "/10",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: CupertinoColors.white,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

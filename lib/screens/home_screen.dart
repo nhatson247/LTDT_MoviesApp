@@ -1,34 +1,30 @@
-import 'dart:ui';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/utils/colors.dart';
 import 'package:testing/widgets/custom_card_normal.dart';
 import '../api/api.dart';
-import '../constants.dart';
 import '../models/movie.dart';
 import '../widgets/custom_card.dart';
+import '../widgets/custom_card_trending.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Movie>> trendingMovies;
-  late Future<List<Movie>> toprateMovies;
+  late Future<List<Movie>> topRatedMovies;
   late Future<List<Movie>> upcomingMovies;
-  late Future<List<Movie>> nowplayingMovies;
 
   @override
   void initState() {
     super.initState();
     trendingMovies = Api().getTrengdingMovies();
-    toprateMovies = Api().getTopRatedMovies();
+    topRatedMovies = Api().getTopRatedMovies();
     upcomingMovies = Api().getUpComingMovies();
-    nowplayingMovies = Api().getNowplayingMovies();
   }
 
   int currentPage = 0;
@@ -40,8 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Icons.person,
   ];
 
-  // control của thẻ card
-  List<Widget> PageControlerWidget() {
+  List<Widget> pageControllerWidget() {
     List<Widget> list = [];
     for (int i = 0; i < 5; i++) {
       list.add(i == currentPage ? _indicator(true) : _indicator(false));
@@ -63,17 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: Stack(
         children: [
-          //item
           SafeArea(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -83,13 +72,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 30),
+                      vertical: 10,
+                      horizontal: 30,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           "Hi, Sơn!",
-                          style: TextStyle(color: Colors.white, fontSize: 30),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                          ),
                         ),
                         Stack(
                           children: [
@@ -97,11 +91,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 50,
                               width: 50,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  image: DecorationImage(
-                                    image: AssetImage("avt_account.jpg"),
-                                    fit: BoxFit.cover,
-                                  )),
+                                borderRadius: BorderRadius.circular(50),
+                                image: DecorationImage(
+                                  image: AssetImage("avt_account.jpg"),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                             Positioned(
                               right: 2,
@@ -123,14 +118,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  // phan search
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Container(
-                      padding: const EdgeInsets.all(10), // can 2 ben
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       child: Row(
                         children: [
                           Icon(
@@ -193,13 +188,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: PageControlerWidget(),
+                      children: pageControllerWidget(),
                     ),
                   ),
-                  // Top
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 20),
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
                     child: Column(
                       children: [
                         Row(
@@ -227,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   FutureBuilder<List<Movie>>(
-                    future: toprateMovies,
+                    future: topRatedMovies,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
@@ -248,14 +244,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 20),
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "UpComing Movies",
+                              "Upcoming Movies",
                               style: TextStyle(
                                 color: Colors.white54,
                                 fontSize: 18,
@@ -271,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -287,57 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text(snapshot.error.toString()),
                         );
                       } else if (snapshot.hasData) {
-                        return MovieListUpComing(snapshot);
-                      } else {
-                        return const Center(
-                          child: Text("No data available"),
-                        );
-                      }
-                    },
-                  ),
-                  //Huyền thoại
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 20),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Now Playing Movies",
-                              style: TextStyle(
-                                color: Colors.white54,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "See all",
-                              style: TextStyle(
-                                color: Colors.yellow[800],
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  FutureBuilder<List<Movie>>(
-                    future: nowplayingMovies,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
-                      } else if (snapshot.hasData) {
-                        return MovieListUpComing(snapshot);
+                        return MovieListUpcoming(snapshot);
                       } else {
                         return const Center(
                           child: Text("No data available"),
@@ -349,45 +297,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 30,
-            right: 30,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 25.0,
-                  sigmaY: 25.0,
-                ),
-                child: Container(
-                  color: kSearchbarColor.withOpacity(0.9),
-                  width: MediaQuery.of(context).size.width,
-                  height: 60,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ...tabBarIcons.map((e) => Icon(
-                            e,
-                            color:
-                                e == Icons.home ? Colors.white : Colors.white54,
-                            size: 25,
-                          ))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 
   Widget TrendingCardsLayout(AsyncSnapshot<List<Movie>> snapshot) {
+    final List<Movie> trendingMovies = snapshot.data ?? [];
+    final limitedMovies = trendingMovies.take(5).toList();
     return SizedBox(
       child: CarouselSlider.builder(
-        itemCount: snapshot.data?.length ?? 0,
+        itemCount: limitedMovies.length,
         options: CarouselOptions(
           height: MediaQuery.of(context).size.height * 0.55,
           autoPlay: true,
@@ -403,41 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         itemBuilder: (context, index, page) {
-          final movie = snapshot.data?[index];
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Stack(
-              children: [
-                Image.network(
-                  '${Constanst.imagePath}${movie?.posterPath}',
-                  fit: BoxFit.cover,
-                  height: MediaQuery.of(context).size.height * 0.50,
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Text(
-                            movie?.title ?? '',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
+          return CustomCardTrending(movie: snapshot.data![index]);
         },
       ),
     );
@@ -445,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget MovieListTopRated(AsyncSnapshot<List<Movie>> snapshot) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       height: MediaQuery.of(context).size.height * 0.35,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -457,9 +343,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget MovieListUpComing(AsyncSnapshot<List<Movie>> snapshot) {
+  Widget MovieListUpcoming(AsyncSnapshot<List<Movie>> snapshot) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       height: MediaQuery.of(context).size.height * 0.25,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -467,27 +353,6 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (context, index) {
           return CustomCard(movie: snapshot.data![index]);
         },
-      ),
-    );
-  }
-
-  Widget PageControllerDots(int itemCount) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(itemCount, (index) {
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-            height: 8,
-            width: 8,
-            decoration: BoxDecoration(
-              color: index == currentPage ? Colors.white : Colors.white30,
-              borderRadius: BorderRadius.circular(20),
-            ),
-          );
-        }),
       ),
     );
   }
