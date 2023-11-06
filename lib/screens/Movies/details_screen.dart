@@ -5,8 +5,8 @@ import 'package:testing/utils/colors.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testing/widgets/cast_and_crew.dart';
 
-import '../api/constants.dart';
-import '../models/movie.dart';
+import '../../api/constants.dart';
+import '../../models/movie.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Movie movie;

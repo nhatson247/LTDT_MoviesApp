@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testing/screens/account_screen.dart';
-import 'package:testing/screens/home_screen.dart';
+import 'package:testing/screens/Movies/home_screen.dart';
 import 'package:testing/utils/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectIndex,
         onTap: _navigateBottomNavBar,
-        backgroundColor: kSearchbarColor.withOpacity(0.9),
+        backgroundColor: kColorDF,
         unselectedItemColor: Colors.grey[300],
         selectedItemColor: Colors.red,
         type: BottomNavigationBarType.fixed,

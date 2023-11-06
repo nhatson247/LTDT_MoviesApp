@@ -2,10 +2,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/utils/colors.dart';
 import 'package:testing/widgets/custom_card_normal.dart';
-import '../api/api.dart';
-import '../models/movie.dart';
-import '../widgets/custom_card.dart';
-import '../widgets/custom_card_trending.dart';
+import '../../api/api.dart';
+import '../../models/movie.dart';
+import '../../widgets/custom_card.dart';
+import '../../widgets/custom_card_trending.dart';
+import 'movie_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -206,15 +207,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 color: Colors.white54,
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              "See all",
-                              style: TextStyle(
-                                color: Colors.yellow[800],
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MovieListScreen(movies: topRatedMovies),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "See all",
+                                style: TextStyle(
+                                  color: Colors.yellow[800],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ],
@@ -260,14 +271,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              "See all",
-                              style: TextStyle(
-                                color: Colors.yellow[800],
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
+                             Text(
+                                "See all",
+                                style: TextStyle(
+                                  color: Colors.yellow[800],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ],

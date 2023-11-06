@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/models/movie.dart';
-import 'package:testing/screens/details_screen.dart';
+import 'package:testing/screens/Movies/details_screen.dart';
 import '../api/constants.dart';
 
 class CustomCardNormal extends StatelessWidget {

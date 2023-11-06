@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testing/api/constants.dart';
 import 'package:testing/models/movie.dart';
 
-import '../screens/details_screen.dart';
+import '../screens/Movies/details_screen.dart';
 
 class CustomCardTrending extends StatelessWidget {
   final Movie movie;
