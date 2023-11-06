@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => MovieListScreen(movies: topRatedMovies),
+                                    builder: (context) => MovieListScreen(movies: topRatedMovies, title: "Top Rated Movie" ),
                                   ),
                                 );
                               },
@@ -271,7 +271,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                             Text(
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MovieListScreen(movies: upcomingMovies, title: "Upcoming Movies" ),
+                                  ),
+                                );
+                              },
+                              child: Text(
                                 "See all",
                                 style: TextStyle(
                                   color: Colors.yellow[800],
@@ -279,8 +288,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
+                            ),
                           ],
-                        ),
+                        )
                       ],
                     ),
                   ),

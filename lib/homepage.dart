@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testing/screens/account_screen.dart';
+import 'package:testing/screens/account/account_screen.dart';
 import 'package:testing/screens/Movies/home_screen.dart';
 import 'package:testing/utils/colors.dart';
 
@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: "Movies"),
+          BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: "Search"),
           BottomNavigationBarItem(icon: Icon(Icons.account_circle_outlined), label: "Account"),
         ],
       )

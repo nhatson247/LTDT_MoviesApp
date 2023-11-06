@@ -6,15 +6,16 @@ import 'details_screen.dart';
 
 class MovieListScreen extends StatelessWidget {
   final Future<List<Movie>> movies;
+  final String title;
 
-  MovieListScreen({required this.movies});
+  MovieListScreen({required this.movies, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
-        title: Text('Danh sách phim'),
+        title: Text(title),
         backgroundColor: kBackgroundColor,
       ),
       body: FutureBuilder<List<Movie>>(
