@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:testing/api/api.dart';
-import 'package:testing/models/People.dart';
+import 'package:testing/homepage.dart';
+import 'package:testing/models/cast.dart';
+import 'package:testing/models/review.dart';
 import 'package:testing/utils/colors.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testing/widgets/cast_and_crew.dart';
@@ -18,12 +20,14 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  late Future<List<People>> popularItems;
+  late Future<List<Cast>> castItems;
+  late Future<List<Review>> reviewItems;
 
   @override
   void initState() {
     super.initState();
-    popularItems = Api().getPeopleMovie();
+    castItems = Api().getMovieCast(widget.movie.id);
+    reviewItems = Api().getMovieReview(widget.movie.id);
   }
 
   @override
@@ -43,6 +47,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         '${Constanst.imagePath}${movie.backDropPath}'),
                     fit: BoxFit.cover,
                   ),
+                ),
+              ),
+            ),
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(80),
+                  color: kSearchbarColor,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
                 ),
               ),
             ),
@@ -172,17 +194,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ),
                 ),
-                // Đoạn này sử dụng popularItems sau khi Future hoàn thành
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: FutureBuilder<List<People>>(
-                    future: popularItems,
+                  child: FutureBuilder<List<Cast>>(
+                    future: castItems,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasData) {
                           return CastAndCrewWidget(casts: snapshot.data!);
                         } else {
-                          return Text("Error loading cast data");
+                          return Text("Error loading cast data ${snapshot.error}");
                         }
                       } else {
                         return CircularProgressIndicator();

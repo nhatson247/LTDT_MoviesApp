@@ -120,31 +120,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 10,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    padding: const EdgeInsets.symmetric( horizontal: 30),
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            "Tìm kiếm",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black26,
-                            ),
-                          )
-                        ],
                       ),
                     ),
                   ),

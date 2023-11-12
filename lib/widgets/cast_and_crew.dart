@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:testing/api/constants.dart';
 
-import '../models/People.dart';
+import '../models/cast.dart';
 
 class CastAndCrewWidget extends StatelessWidget {
-  final List<People> casts;
+  final List<Cast> casts;
 
   const CastAndCrewWidget({super.key, required this.casts});
 
@@ -41,7 +41,7 @@ class CastAndCrewWidget extends StatelessWidget {
     );
   }
 
-  Widget castCard(People cast) {
+  Widget castCard(Cast cast) {
     return Container(
       margin: const EdgeInsets.only(right: 20),
       width: 70,
@@ -51,17 +51,19 @@ class CastAndCrewWidget extends StatelessWidget {
             height: 100,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                image: DecorationImage(
-                  image: NetworkImage('${Constanst.imagePath}${cast.profilePath}'),
-                  fit: BoxFit.cover,
-                )
+              image: DecorationImage(
+                image: cast.profilePath != null
+                    ? NetworkImage('${Constanst.imagePath}${cast.profilePath}')
+                    : AssetImage('cast.jpg') as ImageProvider,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(
             height: 10,
           ),
           Text(
-           cast.name,
+            cast.name,
             maxLines: 2,
             textAlign: TextAlign.left,
             style: TextStyle(
