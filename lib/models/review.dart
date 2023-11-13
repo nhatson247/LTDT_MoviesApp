@@ -3,7 +3,7 @@ class Review {
   String author;
   String username;
   String? avatarPath;
-  double rating;
+  double? rating;
   String content;
   DateTime createdAt;
 

@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 10,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric( horizontal: 30),
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Container(
                       padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
@@ -146,20 +146,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   FutureBuilder<List<Movie>>(
                     future: trendingMovies,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
-                      } else if (snapshot.hasData) {
-                        return TrendingCardsLayout(snapshot);
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          return TrendingCardsLayout(snapshot);
+                        } else {
+                          return Text(
+                              "Error loading tredinng data ${snapshot.error}");
+                        }
                       } else {
-                        return const Center(
-                          child: Text("No data available"),
-                        );
+                        return CircularProgressIndicator();
                       }
                     },
                   ),
@@ -184,67 +179,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Top Rated Movies",
-                              style: TextStyle(
-                                color: Colors.white54,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MovieListScreen(movies: topRatedMovies, title: "Top Rated Movie" ),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                "See all",
-                                style: TextStyle(
-                                  color: Colors.yellow[800],
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  FutureBuilder<List<Movie>>(
-                    future: topRatedMovies,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
-                      } else if (snapshot.hasData) {
-                        return MovieListTopRated(snapshot);
-                      } else {
-                        return const Center(
-                          child: Text("No data available"),
-                        );
-                      }
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 20,
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
                               "Upcoming Movies",
                               style: TextStyle(
                                 color: Colors.white54,
@@ -257,7 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => MovieListScreen(movies: upcomingMovies, title: "Upcoming Movies" ),
+                                    builder: (context) => MovieListScreen(
+                                        movies: upcomingMovies,
+                                        title: "Upcoming Movies"),
                                   ),
                                 );
                               },
@@ -278,20 +214,73 @@ class _HomeScreenState extends State<HomeScreen> {
                   FutureBuilder<List<Movie>>(
                     future: upcomingMovies,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
-                      } else if (snapshot.hasData) {
-                        return MovieListUpcoming(snapshot);
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          return MovieListUpcoming(snapshot);
+                        } else {
+                          return Text(
+                              "Error loading upcoming data ${snapshot.error}");
+                        }
                       } else {
-                        return const Center(
-                          child: Text("No data available"),
-                        );
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Top Rated Movies",
+                              style: TextStyle(
+                                color: Colors.white54,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MovieListScreen(
+                                        movies: topRatedMovies,
+                                        title: "Top Rated Movie"),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "See all",
+                                style: TextStyle(
+                                  color: Colors.yellow[800],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  FutureBuilder<List<Movie>>(
+                    future: topRatedMovies,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          return MovieListTopRated(snapshot);
+                        } else {
+                          return Text(
+                              "Error loading toprated data ${snapshot.error}");
+                        }
+                      } else {
+                        return CircularProgressIndicator();
                       }
                     },
                   ),

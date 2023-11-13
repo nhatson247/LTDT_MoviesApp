@@ -6,6 +6,7 @@ import 'package:testing/models/review.dart';
 import 'package:testing/utils/colors.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testing/widgets/cast_and_crew.dart';
+import 'package:testing/widgets/reviews_and_crew.dart';
 
 import '../../api/constants.dart';
 import '../../models/movie.dart';
@@ -204,6 +205,39 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           return CastAndCrewWidget(casts: snapshot.data!);
                         } else {
                           return Text("Error loading cast data ${snapshot.error}");
+                        }
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
+                ),
+                Container(
+                  margin:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Reviews",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: FutureBuilder<List<Review>>(
+                    future: reviewItems,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          return ReviewCard(reviews: snapshot.data!);
+                        } else {
+                          return Text("Error loading Revies data ${snapshot.error}");
                         }
                       } else {
                         return CircularProgressIndicator();
