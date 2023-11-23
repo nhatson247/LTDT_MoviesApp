@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:testing/screens/account/account_screen.dart';
 import 'package:testing/screens/Movies/home_screen.dart';
+import 'package:testing/screens/Watch/watch_list_screen.dart';
 import 'package:testing/screens/search/search.dart';
 import 'package:testing/utils/colors.dart';
 
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _children = [
     HomeScreen(),
     SearchMovies(),
-    UserAccount(),
+    WatchList(),
   ];
 
   @override
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: "Movies"),
           BottomNavigationBarItem(icon: Icon(Icons.search, size: 30,), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle_outlined), label: "Account"),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt, size: 30,), label: "WatchList"),
         ],
       )
     );

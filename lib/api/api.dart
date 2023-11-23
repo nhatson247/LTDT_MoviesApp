@@ -77,4 +77,17 @@ class Api {
       throw Exception("Review Movies Api error");
     }
   }
+
+  Future<Movie> getMovieDetails(int movieId) async {
+    final response = await http.get(
+      Uri.parse("${Constanst.apiUrl}/movie/$movieId?api_key=${Constanst.apiKey}"),
+    );
+
+    if (response.statusCode == 200) {
+      final decodeData = json.decode(response.body);
+      return Movie.fromJson(decodeData);
+    } else {
+      throw Exception("Get Movie Details API error");
+    }
+  }
 }

@@ -7,14 +7,14 @@ import 'package:testing/utils/colors.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testing/widgets/cast_and_crew.dart';
 import 'package:testing/widgets/reviews_and_crew.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../api/constants.dart';
 import '../../models/movie.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Movie movie;
 
-  const DetailsScreen({super.key, required this.movie});
+  const DetailsScreen({Key? key, required this.movie}) : super(key: key);
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -23,17 +23,51 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   late Future<List<Cast>> castItems;
   late Future<List<Review>> reviewItems;
+  late bool isFavorite; // Kra trang thai yeu thich
 
   @override
   void initState() {
     super.initState();
     castItems = Api().getMovieCast(widget.movie.id);
     reviewItems = Api().getMovieReview(widget.movie.id);
+    isFavorite = false; // dat la false cho ini chay
+    checkFavoriteStatus(); // khi false thi nay se kiem tra trang thai khi chay moi chuong trinh
+  }
+
+  void checkFavoriteStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Set<int> favoriteMovies =
+        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
+            Set<int>();
+    setState(() {
+      isFavorite = favoriteMovies.contains(widget.movie.id);
+    });
+  }
+
+  void toggleFavorite() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isFavorite = !isFavorite; // Đảo ngược trạng thái yêu thích
+    });
+
+    Set<int> favoriteMovies =
+        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
+            Set<int>();
+
+    if (isFavorite) {
+      favoriteMovies.add(widget.movie.id);
+    } else {
+      favoriteMovies.remove(widget.movie.id);
+    }
+
+    prefs.setStringList(
+        'favorites', favoriteMovies.map((id) => id.toString()).toList());
   }
 
   @override
   Widget build(BuildContext context) {
     final Movie movie = widget.movie;
+
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: CustomScrollView(
@@ -69,13 +103,27 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
             ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    toggleFavorite();
+                  },
+                ),
+              ),
+            ],
           ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
                 Container(
                   margin:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -169,7 +217,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 // Mô tả
                 Container(
                   margin:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
                   child: Row(
                     children: [
                       Text(
@@ -185,7 +233,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
                   child: ReadMoreText(
                     movie.overview,
                     style: TextStyle(
@@ -204,7 +252,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         if (snapshot.hasData) {
                           return CastAndCrewWidget(casts: snapshot.data!);
                         } else {
-                          return Text("Error loading cast data ${snapshot.error}");
+                          return Text(
+                              "Error loading cast data ${snapshot.error}");
                         }
                       } else {
                         return CircularProgressIndicator();
@@ -214,7 +263,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Container(
                   margin:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
                   child: Row(
                     children: [
                       Text(
@@ -237,7 +286,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         if (snapshot.hasData) {
                           return ReviewCard(reviews: snapshot.data!);
                         } else {
-                          return Text("Error loading Revies data ${snapshot.error}");
+                          return Text(
+                              "Error loading Revies data ${snapshot.error}");
                         }
                       } else {
                         return CircularProgressIndicator();

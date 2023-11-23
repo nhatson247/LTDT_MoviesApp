@@ -54,12 +54,12 @@ class ReviewCard extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(6.0),
                       child: Text(
                         review.author,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

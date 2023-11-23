@@ -87,93 +87,99 @@ class _SearchMoviesState extends State<SearchMovies> {
                   ),
                 );
               },
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 150,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: NetworkImage('${Constanst.imagePath}${_searchResults[index].backDropPath}'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _searchResults[index].title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: kColorDF,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 150,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage('${Constanst.imagePath}${_searchResults[index].backDropPath}'),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.grey,
-                                ),
-                                child: Text(
-                                  _searchResults[index].releaseDate.split("-").first,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                              Text(
+                                _searchResults[index].title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
                               ),
-                              SizedBox(width: 20),
+                              SizedBox(
+                                height: 10,
+                              ),
                               Row(
                                 children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 18,
-                                    color: Colors.redAccent,
-                                  ),
-                                  Text(
-                                    _searchResults[index].voteAverage.toStringAsFixed(1),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                                  Container(
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.grey,
                                     ),
+                                    child: Text(
+                                      _searchResults[index].releaseDate.split("-").first,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 20),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.star,
+                                        size: 18,
+                                        color: Colors.redAccent,
+                                      ),
+                                      Text(
+                                        _searchResults[index].voteAverage.toStringAsFixed(1),
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                _searchResults[index].overview,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                ),
+                              ),
                             ],
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            _searchResults[index].overview,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white54,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           },
