@@ -1,19 +1,19 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:testing/account/login.dart';
 import 'package:testing/utils/colors.dart';
 import 'package:testing/widgets/custom_card_normal.dart';
-import '../../account/taikhoan.dart';
+import '../../Luu.dart';
 import '../../api/api.dart';
 import '../../models/movie.dart';
 import '../../widgets/custom_card.dart';
 import '../../widgets/custom_card_trending.dart';
 import 'movie_list_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  final TaiKhoan? loggedInStudent;
 
-  const HomeScreen({Key? key, this.loggedInStudent}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -80,117 +80,113 @@ class _HomeScreenState extends State<HomeScreen> {
                       vertical: 10,
                       horizontal: 20,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        if(widget.loggedInStudent == null) ...[
-                          Padding(
-                            padding: const EdgeInsets.only(top:  10),
-                            child: Container(
-                              height: 60,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage("logo.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Login(),
-                                ),
-                              );
-                            },
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 50,
-                                  width: 50,
+                    child: Consumer<AuthProvider>(
+                      builder: (context, authProvider, child) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (authProvider.loggedInStudent == null) ...[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Container(
+                                  height: 60,
+                                  width: 120,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
                                     image: DecorationImage(
-                                      image: AssetImage("cast.jpg"),
+                                      image: AssetImage("logo.jpg"),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          )
-                        ]else ...[
-                          Padding(
-                            padding: const EdgeInsets.only(top:  10),
-                            child: Container(
-                              height: 60,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage("logo.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
                               ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Login(),
-                                ),
-                              );
-                            },
-                            child: Stack(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "${widget.loggedInStudent?.hoten}",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500
-                                          ),
-                                        ),
-                                      ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => Login(),
                                     ),
+                                  );
+                                },
+                                child: Stack(
+                                  children: [
                                     Container(
                                       height: 50,
                                       width: 50,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(50),
                                         image: DecorationImage(
-                                          image: AssetImage("avt_account.jpg"),
+                                          image: AssetImage("cast.jpg"),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                Positioned(
-                                  right: 2,
-                                  top: 2,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.green,
+                              )
+                            ] else ...[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Container(
+                                  height: 60,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage("logo.jpg"),
+                                      fit: BoxFit.cover,
                                     ),
-                                    height: 10,
-                                    width: 10,
                                   ),
                                 ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ],
+                              ),
+                              Stack(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "${authProvider.loggedInStudent?.hoten}",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 50,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(50),
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                "avt_account.jpg"),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Positioned(
+                                    right: 2,
+                                    top: 2,
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.green,
+                                      ),
+                                      height: 10,
+                                      width: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ],
+                        );
+                      },
                     ),
                   ),
                   Padding(

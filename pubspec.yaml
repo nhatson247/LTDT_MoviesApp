@@ -53,8 +53,10 @@ dev_dependencies:
   shared_preferences: ^2.2.2
   sqflite: ^2.3.0
   path: ^1.8.3
+  provider: ^6.1.1
   sqflite_common_ffi_web: ^0.4.0
   email_validator: ^2.1.17
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

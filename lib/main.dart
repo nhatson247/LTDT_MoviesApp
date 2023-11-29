@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:testing/homepage.dart';
+import 'package:provider/provider.dart';
+import 'package:testing/screens/Movies/home_screen.dart';
 
-void main(){
+import 'Luu.dart';
+import 'account/login.dart';
+
+
+void main() {
   databaseFactory = databaseFactoryFfiWeb;
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AuthProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,10 +23,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner:  false,
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Movie",
-      home: HomePage(),
+      home: authProvider.loggedInStudent != null ? HomeScreen() : Login(),
     );
   }
 }
+

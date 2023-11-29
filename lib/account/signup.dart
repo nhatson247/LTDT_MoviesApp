@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:testing/account/login.dart';
 import 'package:testing/account/sql_helper.dart';
 import 'package:testing/account/taikhoan.dart';
 import 'package:email_validator/email_validator.dart';
-import 'hienthisv.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -77,7 +77,7 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
-  Widget buildTextField(TextEditingController controller, String hintText, Color backgroundColor, IconData iconData,  { bool isPassword = false}) {
+  Widget buildTextField(TextEditingController controller, String hintText, Color backgroundColor, IconData iconData, {bool isPassword = false}) {
     return Container(
       width: 327,
       height: 50,
@@ -163,30 +163,7 @@ class _MySignUpState extends State<SignUp> {
   Widget buildSignUpButton() {
     return InkWell(
       onTap: () {
-        if (_isSignUpValid()) {
-          _registerStudent();
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => AccountScreen(),
-            ),
-          );
-        } else {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Thông báo'),
-              content: const Text('Vui lòng điền đầy đủ thông tin và mật khẩu phải khớp nhau.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
-          );
-        }
+        _registerStudent();
       },
       child: Container(
         width: 327,
@@ -207,39 +184,83 @@ class _MySignUpState extends State<SignUp> {
   }
 
   Future<void> _registerStudent() async {
-    TaiKhoan newStudent = TaiKhoan(
-        masv: _masvController.text,
-        hoten: _hotenController.text,
-        email: _emailController.text,
-        matkhau: _matkhauController.text);
+    try {
+      if (_isSignUpValid()) {
+        TaiKhoan newStudent = TaiKhoan(
+          masv: _masvController.text,
+          hoten: _hotenController.text,
+          email: _emailController.text,
+          matkhau: _matkhauController.text,
+        );
 
-    await SQLHelper.createStudent(newStudent);
+        SQLHelper sqlHelper = SQLHelper();
+        await sqlHelper.signup(newStudent);
 
-    showDialog(context: context, builder: (context) => AlertDialog(
-      title: const Text('Đăng ký thành công'),
-      content: const Text('Tài khoản đã được đăng ký thành công.'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('OK'),
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Đăng ký thành công'),
+            content: const Text('Tài khoản đã được đăng ký thành công.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => Login(),
+                    ),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Thông báo'),
+            content: const Text('Vui lòng điền đầy đủ thông tin và mật khẩu phải khớp nhau.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      print('Lỗi khi đăng ký: $e');
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Lỗi'),
+          content: const Text('Có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
         ),
-      ],
-    ),
-    );
+      );
+    }
   }
 
   bool _isSignUpValid() {
-    if (_masvController.text.isEmpty ||
-        _hotenController.text.isEmpty ||
-        _emailController.text.isEmpty ||
-        _matkhauController.text.isEmpty ||
-        _confirmMatkhauController.text.isEmpty ||
-        !_isValidEmail ||
-        _matkhauController.text != _confirmMatkhauController.text) {
-      return false;
-    }
-    return true;
+    bool isPasswordMatch = _matkhauController.text == _confirmMatkhauController.text;
+
+    return _masvController.text.isNotEmpty &&
+        _hotenController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty &&
+        EmailValidator.validate(_emailController.text) &&
+        _matkhauController.text.isNotEmpty &&
+        isPasswordMatch;
   }
 }

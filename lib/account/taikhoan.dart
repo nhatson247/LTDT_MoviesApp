@@ -4,7 +4,6 @@ class TaiKhoan {
   String matkhau;
   String email;
 
-
   TaiKhoan({
     required this.masv,
     required this.hoten,
@@ -16,7 +15,7 @@ class TaiKhoan {
     return {
       'masv': masv,
       'hoten': hoten,
-      'matkhau' : matkhau,
+      'matkhau': matkhau,
       'email': email,
     };
   }

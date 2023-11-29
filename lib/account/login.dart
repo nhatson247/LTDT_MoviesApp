@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testing/account/signup.dart';
 import 'package:testing/account/sql_helper.dart';
 import 'package:testing/account/taikhoan.dart';
-
+import '../Luu.dart';
 import '../screens/Movies/home_screen.dart';
 import '../utils/colors.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -17,6 +18,32 @@ class Login extends StatefulWidget {
 class _MyLoginState extends State<Login> {
   final TextEditingController _masvController = TextEditingController();
   final TextEditingController _matkhauController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Check for saved login information on app start
+    _checkSavedLogin();
+  }
+
+  // Check if there is saved login information and navigate to the HomeScreen
+  void _checkSavedLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? hoten = prefs.getString('hoten');
+
+    if (hoten != null) {
+      TaiKhoan loggedInStudent =
+          TaiKhoan(hoten: hoten, masv: "", matkhau: "", email: "");
+      Provider.of<AuthProvider>(context, listen: false)
+          .setLoggedInStudent(loggedInStudent);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +90,6 @@ class _MyLoginState extends State<Login> {
     );
   }
 
-  // Trong hàm buildText của _MyLoginState
   Widget buildText(String text) {
     return Padding(
       padding: const EdgeInsets.only(top: 30),
@@ -90,8 +116,9 @@ class _MyLoginState extends State<Login> {
     );
   }
 
-
-  Widget buildTextField(TextEditingController controller, String hintText, Color backgroundColor, IconData iconData,  { bool isPassword = false}) {
+  Widget buildTextField(TextEditingController controller, String hintText,
+      Color backgroundColor, IconData iconData,
+      {bool isPassword = false}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -152,21 +179,8 @@ class _MyLoginState extends State<Login> {
     );
   }
 
-  Widget buildSubtitle(String text) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          text,
-          style: const TextStyle(color: Colors.black),
-        ),
-      ],
-    );
-  }
-
-  // Thêm phương thức xử lý đăng nhập
   Future<void> _login() async {
-    final List<TaiKhoan> students = await SQLHelper.getStudents();
+    final List<TaiKhoan> students = await SQLHelper().getAccount();
     TaiKhoan? loggedInStudent;
 
     for (TaiKhoan student in students) {
@@ -178,9 +192,16 @@ class _MyLoginState extends State<Login> {
     }
 
     if (loggedInStudent != null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('hoten', loggedInStudent.hoten);
+
+      // Sử dụng Provider để set trạng thái xác thực
+      Provider.of<AuthProvider>(context, listen: false)
+          .setLoggedInStudent(loggedInStudent);
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => HomeScreen(loggedInStudent: loggedInStudent),
+          builder: (context) => HomeScreen(),
         ),
       );
     } else {
