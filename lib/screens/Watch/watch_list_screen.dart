@@ -51,7 +51,7 @@ class _WatchListState extends State<WatchList> {
         color: kBackgroundColor,
         child: favoriteMovies.isEmpty
             ? Center(
-          child: Text("Favorites list is empty"),
+          child: Text("Favorites list is empty", style:  TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),),
         )
             : ListView.builder(
           itemCount: favoriteMovies.length,

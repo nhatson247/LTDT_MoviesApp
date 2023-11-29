@@ -1,8 +1,6 @@
-
-
 import 'package:flutter/cupertino.dart';
-
 import 'account/taikhoan.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
   TaiKhoan? _loggedInStudent;
@@ -14,8 +12,10 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() {
+  void logout() async  {
     _loggedInStudent = null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('hoten');
     notifyListeners();
   }
 }

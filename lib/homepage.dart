@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
       _selectIndex = index;
     });
   }
-// chuyen huong active
+
   final List<Widget> _children = [
     HomeScreen(),
     SearchMovies(),

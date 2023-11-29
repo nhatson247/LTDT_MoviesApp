@@ -1,16 +1,9 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:testing/account/login.dart';
 import 'package:testing/utils/colors.dart';
-import 'package:testing/widgets/custom_card_normal.dart';
-import '../../Luu.dart';
+import 'package:testing/widgets/Movie_Section.dart';
 import '../../api/api.dart';
 import '../../models/movie.dart';
-import '../../widgets/custom_card.dart';
-import '../../widgets/custom_card_trending.dart';
 import 'movie_list_screen.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -75,120 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 20,
-                    ),
-                    child: Consumer<AuthProvider>(
-                      builder: (context, authProvider, child) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (authProvider.loggedInStudent == null) ...[
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Container(
-                                  height: 60,
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage("logo.jpg"),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Login(),
-                                    ),
-                                  );
-                                },
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      height: 50,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        image: DecorationImage(
-                                          image: AssetImage("cast.jpg"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ] else ...[
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Container(
-                                  height: 60,
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage("logo.jpg"),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Stack(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "${authProvider.loggedInStudent?.hoten}",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(50),
-                                          image: DecorationImage(
-                                            image: AssetImage(
-                                                "avt_account.jpg"),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Positioned(
-                                    right: 2,
-                                    top: 2,
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.green,
-                                      ),
-                                      height: 10,
-                                      width: 10,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ],
-                        );
-                      },
-                    ),
-                  ),
+                  UserInfoSection(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Container(
@@ -213,21 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  FutureBuilder<List<Movie>>(
-                    future: trendingMovies,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasData) {
-                          return TrendingCardsLayout(snapshot);
-                        } else {
-                          return Text(
-                              "Error loading tredinng data ${snapshot.error}");
-                        }
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
+                  TrendingMoviesSection(trendingMovies: trendingMovies),
                   SizedBox(
                     height: 20,
                   ),
@@ -281,21 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  FutureBuilder<List<Movie>>(
-                    future: upcomingMovies,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasData) {
-                          return MovieListUpcoming(snapshot);
-                        } else {
-                          return Text(
-                              "Error loading upcoming data ${snapshot.error}");
-                        }
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
+                  UpcomingMoviesSection(upcomingMovies: upcomingMovies),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
@@ -339,81 +191,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  FutureBuilder<List<Movie>>(
-                    future: topRatedMovies,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasData) {
-                          return MovieListTopRated(snapshot);
-                        } else {
-                          return Text(
-                              "Error loading toprated data ${snapshot.error}");
-                        }
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
+                  TopRatedMoviesSection(topRatedMovies: topRatedMovies),
                 ],
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget TrendingCardsLayout(AsyncSnapshot<List<Movie>> snapshot) {
-    final List<Movie> trendingMovies = snapshot.data ?? [];
-    final limitedMovies = trendingMovies.take(5).toList();
-    return SizedBox(
-      child: CarouselSlider.builder(
-        itemCount: limitedMovies.length,
-        options: CarouselOptions(
-          height: MediaQuery.of(context).size.height * 0.55,
-          autoPlay: true,
-          viewportFraction: 0.55,
-          enlargeCenterPage: true,
-          pageSnapping: true,
-          autoPlayCurve: Curves.fastLinearToSlowEaseIn,
-          autoPlayAnimationDuration: const Duration(seconds: 1),
-          onPageChanged: (int page, reason) {
-            setState(() {
-              currentPage = page;
-            });
-          },
-        ),
-        itemBuilder: (context, index, page) {
-          return CustomCardTrending(movie: snapshot.data![index]);
-        },
-      ),
-    );
-  }
-
-  Widget MovieListTopRated(AsyncSnapshot<List<Movie>> snapshot) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      height: MediaQuery.of(context).size.height * 0.35,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: snapshot.data?.length ?? 0,
-        itemBuilder: (context, index) {
-          return CustomCardNormal(movie: snapshot.data![index]);
-        },
-      ),
-    );
-  }
-
-  Widget MovieListUpcoming(AsyncSnapshot<List<Movie>> snapshot) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      height: MediaQuery.of(context).size.height * 0.25,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: snapshot.data?.length ?? 0,
-        itemBuilder: (context, index) {
-          return CustomCard(movie: snapshot.data![index]);
-        },
       ),
     );
   }

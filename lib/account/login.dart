@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testing/account/signup.dart';
 import 'package:testing/account/sql_helper.dart';
 import 'package:testing/account/taikhoan.dart';
+import 'package:testing/homepage.dart';
 import '../Luu.dart';
-import '../screens/Movies/home_screen.dart';
 import '../utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -22,11 +23,9 @@ class _MyLoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    // Check for saved login information on app start
     _checkSavedLogin();
   }
 
-  // Check if there is saved login information and navigate to the HomeScreen
   void _checkSavedLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? hoten = prefs.getString('hoten');
@@ -39,7 +38,7 @@ class _MyLoginState extends State<Login> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => HomeScreen(),
+          builder: (context) => HomePage(),
         ),
       );
     }
@@ -116,41 +115,39 @@ class _MyLoginState extends State<Login> {
     );
   }
 
-  Widget buildTextField(TextEditingController controller, String hintText,
-      Color backgroundColor, IconData iconData,
-      {bool isPassword = false}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: 327,
-        height: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(11),
-          color: backgroundColor,
-        ),
-        margin: const EdgeInsets.only(bottom: 15),
-        child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: TextField(
-            controller: controller,
-            obscureText: isPassword,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(11),
-              ),
-              fillColor: Colors.black,
-              prefixIcon: Icon(
-                iconData,
-                color: Colors.black,
-              ),
-              hintStyle: const TextStyle(color: Colors.grey),
-              hintText: hintText,
-              contentPadding: const EdgeInsets.symmetric(vertical: 15),
+  Widget buildTextField(TextEditingController controller, String hintText, Color backgroundColor, IconData iconData, {bool isPassword = false}) {
+    return Container(
+      width: 327,
+      height: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(11),
+        color: backgroundColor,
+      ),
+      margin: const EdgeInsets.only(bottom: 15),
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: TextField(
+          controller: controller,
+          obscureText: isPassword,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(11),
             ),
-            style: const TextStyle(
+            fillColor: Colors.black,
+            prefixIcon: Icon(
+              iconData,
               color: Colors.black,
             ),
+            hintStyle: const TextStyle(color: Colors.grey),
+            hintText: hintText,
+            contentPadding: const EdgeInsets.symmetric(vertical: 15),
           ),
+          style: const TextStyle(
+            color: Colors.black,
+          ),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+          ],
         ),
       ),
     );
@@ -195,13 +192,12 @@ class _MyLoginState extends State<Login> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('hoten', loggedInStudent.hoten);
 
-      // Sử dụng Provider để set trạng thái xác thực
       Provider.of<AuthProvider>(context, listen: false)
           .setLoggedInStudent(loggedInStudent);
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => HomeScreen(),
+          builder: (context) => HomePage(),
         ),
       );
     } else {
