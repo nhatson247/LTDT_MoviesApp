@@ -37,4 +37,14 @@ class SQLHelper {
     List<Map<String, Object?>> result = await db.query('tai_khoan');
     return result.map((e) => TaiKhoan.fromMap(e)).toList();
   }
+
+  Future<bool> FindSV(String masv) async {
+    final Database db = await initDB();
+    var result = await db.query(
+      'tai_khoan',
+      where: 'masv = ?',
+      whereArgs: [masv],
+    );
+    return result.isNotEmpty;
+  }
 }

@@ -17,8 +17,7 @@ class _MySignUpState extends State<SignUp> {
   final TextEditingController _hotenController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _matkhauController = TextEditingController();
-  final TextEditingController _confirmMatkhauController =
-      TextEditingController();
+  final TextEditingController _confirmMatkhauController = TextEditingController();
   bool _isValidEmail = true;
 
   @override
@@ -36,21 +35,13 @@ class _MySignUpState extends State<SignUp> {
                 children: [
                   buildTitle("Đăng ký tài khoản"),
                   const SizedBox(height: 20),
-                  buildSubtitle(
-                      "Vui lòng điền thông tin của bạn vào form dưới đây."),
+                  buildSubtitle("Vui lòng điền thông tin của bạn vào form dưới đây."),
                   const SizedBox(height: 20),
-                  buildTextField(_masvController, "Mã Sinh Viên", Colors.white,
-                      Icons.person),
-                  buildTextNameField(
-                      _hotenController, "Họ Tên", Colors.white, Icons.abc),
-                  myEditEmail(
-                      _emailController, "Email", Colors.white, Icons.email),
-                  buildTextField(_matkhauController, "Mật khẩu", Colors.white,
-                      Icons.password,
-                      isPassword: true),
-                  buildTextField(_confirmMatkhauController, "Nhập lại mật khẩu",
-                      Colors.white, Icons.password,
-                      isPassword: true),
+                  buildTextField(_masvController, "Mã Sinh Viên", Colors.white, Icons.person),
+                  buildTextNameField(_hotenController, "Họ Tên", Colors.white, Icons.person),
+                  myEditEmail(_emailController, "Email", Colors.white, Icons.email),
+                  buildTextField(_matkhauController, "Mật khẩu", Colors.white, Icons.password, isPassword: true),
+                  buildTextField(_confirmMatkhauController, "Nhập lại mật khẩu", Colors.white, Icons.password, isPassword: true),
                   const SizedBox(height: 15),
                   buildSignUpButton(),
                 ],
@@ -192,12 +183,7 @@ class _MySignUpState extends State<SignUp> {
             contentPadding: const EdgeInsets.symmetric(
               vertical: 15,
             ),
-            suffixIcon: _isValidEmail
-                ? null
-                : Icon(
-                    Icons.error,
-                    color: Colors.red,
-                  ),
+            suffixIcon: _isValidEmail ? null : Icon(Icons.error, color: Colors.red),
           ),
           style: const TextStyle(
             color: Colors.black,
@@ -250,35 +236,53 @@ class _MySignUpState extends State<SignUp> {
         );
 
         SQLHelper sqlHelper = SQLHelper();
-        await sqlHelper.signup(newStudent);
+        bool isMaSVExists = await sqlHelper.FindSV(newStudent.masv);
 
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Đăng ký thành công'),
-            content: const Text('Tài khoản đã được đăng ký thành công.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => Login(),
-                    ),
-                  );
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
+        if (isMaSVExists) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Lỗi'),
+              content: const Text('Mã sinh viên đã tồn tại. Vui lòng chọn mã sinh viên khác.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          await sqlHelper.signup(newStudent);
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Đăng ký thành công'),
+              content: const Text('Tài khoản đã được đăng ký thành công.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => Login(),
+                      ),
+                    );
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
       } else {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Thông báo'),
-            content: const Text(
-                'Vui lòng điền đầy đủ thông tin và đảm bảo mật khẩu trùng khớp.'),
+            content: const Text('Vui lòng điền đầy đủ thông tin và đảm bảo mật khẩu trùng khớp.'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -291,13 +295,11 @@ class _MySignUpState extends State<SignUp> {
         );
       }
     } catch (e) {
-      print('Lỗi khi đăng ký: $e');
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Lỗi'),
-          content:
-              const Text('Có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.'),
+          content: const Text('Có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -312,8 +314,7 @@ class _MySignUpState extends State<SignUp> {
   }
 
   bool _isSignUpValid() {
-    bool isPasswordMatch =
-        _matkhauController.text == _confirmMatkhauController.text;
+    bool isPasswordMatch = _matkhauController.text == _confirmMatkhauController.text;
 
     return _masvController.text.isNotEmpty &&
         _hotenController.text.isNotEmpty &&

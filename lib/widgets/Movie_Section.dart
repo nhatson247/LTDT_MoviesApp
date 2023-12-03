@@ -8,21 +8,28 @@ import '../../widgets/custom_card_trending.dart';
 import '../../account/login.dart';
 import '../../Luu.dart';
 
-
-class TrendingMoviesSection extends StatelessWidget {
+class TrendingMoviesSection extends StatefulWidget {
   final Future<List<Movie>> trendingMovies;
+  final ValueChanged<int> onPageChanged; // Thêm dòng này
 
-  const TrendingMoviesSection({Key? key, required this.trendingMovies})
+  const TrendingMoviesSection({Key? key, required this.trendingMovies, required this.onPageChanged})
       : super(key: key);
+
+  @override
+  State<TrendingMoviesSection> createState() => _TrendingMoviesSectionState();
+}
+
+class _TrendingMoviesSectionState extends State<TrendingMoviesSection> {
+  int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Movie>>(
-      future: trendingMovies,
+      future: widget.trendingMovies,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            return TrendingCardsLayout(context,snapshot);
+            return TrendingCardsLayout(context, snapshot);
           } else {
             return Text("Error loading trending data ${snapshot.error}");
           }
@@ -48,7 +55,10 @@ class TrendingMoviesSection extends StatelessWidget {
           autoPlayCurve: Curves.fastLinearToSlowEaseIn,
           autoPlayAnimationDuration: const Duration(seconds: 1),
           onPageChanged: (int page, reason) {
-            // Có thể cần sử dụng Provider để thông báo thay đổi trang thái tại đây
+            setState(() {
+              currentPage = page;
+            });
+            widget.onPageChanged(currentPage);
           },
         ),
         itemBuilder: (context, index, page) {

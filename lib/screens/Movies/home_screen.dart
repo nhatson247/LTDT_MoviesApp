@@ -34,13 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
     Icons.person,
   ];
 
-  List<Widget> pageControllerWidget() {
+  List<Widget> pageControllerWidget(int numberOfPages, int currentPage) {
     List<Widget> list = [];
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < numberOfPages; i++) {
       list.add(i == currentPage ? _indicator(true) : _indicator(false));
     }
     return list;
   }
+
 
   Widget _indicator(bool isActive) {
     return AnimatedContainer(
@@ -93,7 +94,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  TrendingMoviesSection(trendingMovies: trendingMovies),
+                  TrendingMoviesSection(
+                    trendingMovies: trendingMovies,
+                    onPageChanged: (int page) {
+                      setState(() {
+                        currentPage = page;
+                      });
+                    },
+                  ),
                   SizedBox(
                     height: 20,
                   ),
@@ -101,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: pageControllerWidget(),
+                      children: pageControllerWidget(5, currentPage),
                     ),
                   ),
                   Padding(

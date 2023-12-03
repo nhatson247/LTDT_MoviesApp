@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testing/api/api.dart';
 import 'package:testing/models/movie.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../api/constants.dart';
 import '../../utils/colors.dart';
 import '../Movies/details_screen.dart';
@@ -18,6 +18,25 @@ class _SearchMoviesState extends State<SearchMovies> {
   List<Movie> _searchResults = [];
   bool _isSearching = false; // trang thai tim kiem
   bool _searchComplete = false; // kiem tra da hoan thanh tim kiem chua
+
+  late SharedPreferences _prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    _initSharedPreferences();
+  }
+
+  _initSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    String savedKeyword = _prefs.getString('searchKeyword') ?? '';
+    _searchController.text = savedKeyword;
+    _onSearchTextChanged(savedKeyword);
+  }
+
+  _saveSearchKeyword(String keyword) {
+    _prefs.setString('searchKeyword', keyword);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +64,10 @@ class _SearchMoviesState extends State<SearchMovies> {
               borderSide: BorderSide.none,
             ),
           ),
-          onChanged: _onSearchTextChanged,
+          onChanged: (text) {
+            _onSearchTextChanged(text);
+            _saveSearchKeyword(text);
+          },
         ),
       ),
       body: _buildSearchResults(),
