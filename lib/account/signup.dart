@@ -4,6 +4,9 @@ import 'package:testing/account/login.dart';
 import 'package:testing/account/sql_helper.dart';
 import 'package:testing/account/taikhoan.dart';
 import 'package:email_validator/email_validator.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -225,6 +228,10 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
+  }
+
   Future<void> _registerStudent() async {
     try {
       if (_isSignUpValid()) {
@@ -232,7 +239,7 @@ class _MySignUpState extends State<SignUp> {
           masv: _masvController.text,
           hoten: _hotenController.text,
           email: _emailController.text,
-          matkhau: _matkhauController.text,
+          matkhau: generateMd5(_matkhauController.text),
         );
 
         SQLHelper sqlHelper = SQLHelper();

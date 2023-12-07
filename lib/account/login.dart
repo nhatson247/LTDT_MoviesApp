@@ -5,9 +5,11 @@ import 'package:testing/account/signup.dart';
 import 'package:testing/account/sql_helper.dart';
 import 'package:testing/account/taikhoan.dart';
 import 'package:testing/homepage.dart';
+import 'package:crypto/crypto.dart';
+import 'package:provider/provider.dart';
 import '../Luu.dart';
 import '../utils/colors.dart';
-import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -115,7 +117,9 @@ class _MyLoginState extends State<Login> {
     );
   }
 
-  Widget buildTextField(TextEditingController controller, String hintText, Color backgroundColor, IconData iconData, {bool isPassword = false}) {
+  Widget buildTextField(TextEditingController controller, String hintText,
+      Color backgroundColor, IconData iconData,
+      {bool isPassword = false}) {
     return Container(
       width: 327,
       height: 50,
@@ -176,13 +180,17 @@ class _MyLoginState extends State<Login> {
     );
   }
 
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
+  }
+
   Future<void> _login() async {
     final List<TaiKhoan> students = await SQLHelper().getAccount();
     TaiKhoan? loggedInStudent;
 
     for (TaiKhoan student in students) {
       if (student.masv == _masvController.text &&
-          student.matkhau == _matkhauController.text) {
+          student.matkhau == generateMd5(_matkhauController.text)) {
         loggedInStudent = student;
         break;
       }
