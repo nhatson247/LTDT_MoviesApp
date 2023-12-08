@@ -47,4 +47,10 @@ class SQLHelper {
     );
     return result.isNotEmpty;
   }
+
+  Future<void> updatePassword(String masv, String newPassword) async {
+    final Database db = await initDB();
+    await db.update('tai_khoan', {'matkhau': newPassword}, where: 'masv = ?', whereArgs: [masv]);
+  }
+
 }

@@ -7,7 +7,7 @@ import 'package:testing/account/taikhoan.dart';
 import 'package:testing/homepage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:provider/provider.dart';
-import '../Luu.dart';
+import 'Luu.dart';
 import '../utils/colors.dart';
 import 'dart:convert';
 
@@ -185,45 +185,63 @@ class _MyLoginState extends State<Login> {
   }
 
   Future<void> _login() async {
-    final List<TaiKhoan> students = await SQLHelper().getAccount();
-    TaiKhoan? loggedInStudent;
+     if(_masvController.text.isNotEmpty && _matkhauController.text.isNotEmpty ){
+       final List<TaiKhoan> students = await SQLHelper().getAccount();
+       TaiKhoan? loggedInStudent;
 
-    for (TaiKhoan student in students) {
-      if (student.masv == _masvController.text &&
-          student.matkhau == generateMd5(_matkhauController.text)) {
-        loggedInStudent = student;
-        break;
-      }
-    }
+       for (TaiKhoan student in students) {
+         if (student.masv == _masvController.text &&
+             student.matkhau == generateMd5(_matkhauController.text)) {
+           loggedInStudent = student;
+           break;
+         }
+       }
 
-    if (loggedInStudent != null) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('hoten', loggedInStudent.hoten);
+       if (loggedInStudent != null) {
+         SharedPreferences prefs = await SharedPreferences.getInstance();
+         prefs.setString('hoten', loggedInStudent.hoten);
 
-      Provider.of<AuthProvider>(context, listen: false)
-          .setLoggedInStudent(loggedInStudent);
+         Provider.of<AuthProvider>(context, listen: false)
+             .setLoggedInStudent(loggedInStudent);
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Thông báo'),
-          content: const Text('Mã sinh viên hoặc mật khẩu không đúng.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
+         Navigator.of(context).pushReplacement(
+           MaterialPageRoute(
+             builder: (context) => HomePage(),
+           ),
+         );
+       } else {
+         showDialog(
+           context: context,
+           builder: (context) => AlertDialog(
+             title: const Text('Thông báo'),
+             content: const Text('Thông tin đăng nhập không đúng.'),
+             actions: [
+               TextButton(
+                 onPressed: () {
+                   Navigator.of(context).pop();
+                 },
+                 child: const Text('OK'),
+               ),
+             ],
+           ),
+         );
+       }
+     }else{
+       showDialog(
+         context: context,
+         builder: (context) => AlertDialog(
+           backgroundColor: Colors.red[900],
+           title: const Text('Vui lòng điền thông tin đăng nhập', style: TextStyle(color: Colors.white),),
+           actions: [
+             TextButton(
+               onPressed: () {
+                 Navigator.of(context).pop();
+               },
+               child: const Text('OK', style: TextStyle(color: Colors.white),),
+             ),
+           ],
+         ),
+       );
+     }
+   }
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
-
 class TaiKhoan {
   String masv;
   String hoten;
@@ -32,7 +31,12 @@ class TaiKhoan {
       email: map['email'],
     );
   }
+
   String generateMd5(String input) {
     return md5.convert(utf8.encode(input)).toString();
+  }
+
+  void changePassword(String newPassword) {
+    matkhau = generateMd5(newPassword);
   }
 }

@@ -6,7 +6,8 @@ import '../../widgets/custom_card.dart';
 import '../../widgets/custom_card_normal.dart';
 import '../../widgets/custom_card_trending.dart';
 import '../../account/login.dart';
-import '../../Luu.dart';
+import '../account/Luu.dart';
+import '../account/changePW.dart';
 
 class TrendingMoviesSection extends StatefulWidget {
   final Future<List<Movie>> trendingMovies;
@@ -289,11 +290,21 @@ class UserInfoSection extends StatelessWidget {
       position: position,
       items: [
         PopupMenuItem<String>(
+          value: 'changepass',
+          child: Text(
+            'Đổi mật khẩu',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
+        PopupMenuItem<String>(
           value: 'logout',
           child: Text(
             'Đăng xuất',
             style: TextStyle(
-              color: Colors.grey[300],
+              color: Colors.white,
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -306,6 +317,11 @@ class UserInfoSection extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Login()),
+        );
+      }else if (value == 'changepass') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChangePass()),
         );
       }
     });

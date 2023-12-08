@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'account/taikhoan.dart';
+import 'taikhoan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -18,4 +18,19 @@ class AuthProvider extends ChangeNotifier {
     prefs.remove('hoten');
     notifyListeners();
   }
+
+  void refreshHomePage() {
+    notifyListeners();
+  }
+
+  void updateLoggedInStudent(TaiKhoan student) {
+    if (_loggedInStudent != null) {
+      _loggedInStudent!.hoten = student.hoten;
+      _loggedInStudent!.matkhau = student.matkhau;
+      _loggedInStudent!.email = student.email;
+      notifyListeners();
+    }
+  }
+
 }
+

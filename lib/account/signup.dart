@@ -7,7 +7,6 @@ import 'package:email_validator/email_validator.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
-
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -20,7 +19,8 @@ class _MySignUpState extends State<SignUp> {
   final TextEditingController _hotenController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _matkhauController = TextEditingController();
-  final TextEditingController _confirmMatkhauController = TextEditingController();
+  final TextEditingController _confirmMatkhauController =
+      TextEditingController();
   bool _isValidEmail = true;
 
   @override
@@ -38,13 +38,21 @@ class _MySignUpState extends State<SignUp> {
                 children: [
                   buildTitle("Đăng ký tài khoản"),
                   const SizedBox(height: 20),
-                  buildSubtitle("Vui lòng điền thông tin của bạn vào form dưới đây."),
+                  buildSubtitle(
+                      "Vui lòng điền thông tin của bạn vào form dưới đây."),
                   const SizedBox(height: 20),
-                  buildTextField(_masvController, "Mã Sinh Viên", Colors.white, Icons.person),
-                  buildTextNameField(_hotenController, "Họ Tên", Colors.white, Icons.person),
-                  myEditEmail(_emailController, "Email", Colors.white, Icons.email),
-                  buildTextField(_matkhauController, "Mật khẩu", Colors.white, Icons.password, isPassword: true),
-                  buildTextField(_confirmMatkhauController, "Nhập lại mật khẩu", Colors.white, Icons.password, isPassword: true),
+                  buildTextField(_masvController, "Mã Sinh Viên", Colors.white,
+                      Icons.person),
+                  buildTextNameField(
+                      _hotenController, "Họ Tên", Colors.white, Icons.person),
+                  myEditEmail(
+                      _emailController, "Email", Colors.white, Icons.email),
+                  buildTextField(_matkhauController, "Mật khẩu", Colors.white,
+                      Icons.password,
+                      isPassword: true),
+                  buildTextField(_confirmMatkhauController, "Nhập lại mật khẩu",
+                      Colors.white, Icons.password,
+                      isPassword: true),
                   const SizedBox(height: 15),
                   buildSignUpButton(),
                 ],
@@ -84,7 +92,9 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
-  Widget buildTextField(TextEditingController controller, String hintText, Color backgroundColor, IconData iconData, {bool isPassword = false}) {
+  Widget buildTextField(TextEditingController controller, String hintText,
+      Color backgroundColor, IconData iconData,
+      {bool isPassword = false}) {
     return Container(
       width: 327,
       height: 50,
@@ -122,7 +132,8 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
-  Widget buildTextNameField(TextEditingController controller, String hintText, Color backgroundColor, IconData iconData) {
+  Widget buildTextNameField(TextEditingController controller, String hintText,
+      Color backgroundColor, IconData iconData) {
     return Container(
       width: 327,
       height: 50,
@@ -159,7 +170,8 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
-  Widget myEditEmail(TextEditingController controller, String content, Color backgroundcolor, IconData iconData) {
+  Widget myEditEmail(TextEditingController controller, String content,
+      Color backgroundcolor, IconData iconData) {
     return Container(
       width: 327,
       height: 50,
@@ -186,7 +198,8 @@ class _MySignUpState extends State<SignUp> {
             contentPadding: const EdgeInsets.symmetric(
               vertical: 15,
             ),
-            suffixIcon: _isValidEmail ? null : Icon(Icons.error, color: Colors.red),
+            suffixIcon:
+                _isValidEmail ? null : Icon(Icons.error, color: Colors.red),
           ),
           style: const TextStyle(
             color: Colors.black,
@@ -249,14 +262,20 @@ class _MySignUpState extends State<SignUp> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Lỗi'),
-              content: const Text('Mã sinh viên đã tồn tại. Vui lòng chọn mã sinh viên khác.'),
+              backgroundColor: Colors.red[800],
+              title: const Text(
+                'Mã sinh viên đã tồn tại. Vui lòng chọn mã sinh viên khác.',
+                style: TextStyle(color: Colors.white),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('OK'),
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -266,8 +285,11 @@ class _MySignUpState extends State<SignUp> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Đăng ký thành công'),
-              content: const Text('Tài khoản đã được đăng ký thành công.'),
+              backgroundColor: Colors.green[500],
+              title: const Text(
+                'Đăng ký thành công',
+                style: TextStyle(color: Colors.white),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -278,7 +300,10 @@ class _MySignUpState extends State<SignUp> {
                       ),
                     );
                   },
-                  child: const Text('OK'),
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -288,14 +313,14 @@ class _MySignUpState extends State<SignUp> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Thông báo'),
-            content: const Text('Vui lòng điền đầy đủ thông tin và đảm bảo mật khẩu trùng khớp.'),
+            backgroundColor: Colors.yellow[500],
+            title: const Text('Vui lòng điền đầy đủ thông tin và đảm bảo mật khẩu trùng khớp.', style: TextStyle(color: Colors.black),),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('OK'),
+                child: const Text('OK', style: TextStyle(color: Colors.black),),
               ),
             ],
           ),
@@ -305,14 +330,14 @@ class _MySignUpState extends State<SignUp> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Lỗi'),
-          content: const Text('Có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.'),
+          backgroundColor: Colors.red[900],
+          title: const Text('Đăng ký không thành công, vui lòng thử lại', style: TextStyle(color: Colors.white),),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: const Text('OK',style: TextStyle(color: Colors.white),),
             ),
           ],
         ),
@@ -321,7 +346,8 @@ class _MySignUpState extends State<SignUp> {
   }
 
   bool _isSignUpValid() {
-    bool isPasswordMatch = _matkhauController.text == _confirmMatkhauController.text;
+    bool isPasswordMatch =
+        _matkhauController.text == _confirmMatkhauController.text;
 
     return _masvController.text.isNotEmpty &&
         _hotenController.text.isNotEmpty &&
