@@ -49,9 +49,33 @@ class _ChangePassState extends State<ChangePass> {
                   buildTextField(_nhaplaimatkhaumoiController, "Nhập lại mật khẩu mới ", Colors.white, Icons.password, isPassword: true),
                   const SizedBox(height: 15),
                   buildLoginButton(),
+                  const SizedBox(height: 10),
+                  buildBackButton(context),
                 ],
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildBackButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context); // Go back to the previous screen
+      },
+      child: Container(
+        width: 327,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.yellow[800], // Choose a color for the back button
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: const Center(
+          child: Text(
+            'Quay lại',
+            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
       ),
