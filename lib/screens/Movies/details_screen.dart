@@ -23,15 +23,15 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   late Future<List<Cast>> castItems;
   late Future<List<Review>> reviewItems;
-  late bool isFavorite; // Kra trang thai yeu thich
+  late bool isFavorite;
 
   @override
   void initState() {
     super.initState();
     castItems = Api().getMovieCast(widget.movie.id);
     reviewItems = Api().getMovieReview(widget.movie.id);
-    isFavorite = false; // dat la false cho ini chay
-    checkFavoriteStatus(); // khi false thi nay se kiem tra trang thai khi chay moi chuong trinh
+    isFavorite = false;
+    checkFavoriteStatus();
   }
 
   void checkFavoriteStatus() async {
@@ -47,7 +47,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void toggleFavorite() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      isFavorite = !isFavorite; // Đảo ngược trạng thái yêu thích
+      isFavorite = !isFavorite;
     });
 
     Set<int> favoriteMovies =
@@ -123,7 +123,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               [
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -131,66 +131,72 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                movie.title,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.grey,
-                                ),
-                                child: Text(
-                                  movie.releaseDate.split("-").first,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  movie.title,
                                   style: const TextStyle(
-                                    fontSize: 14,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.red,
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.play_circle_outline,
-                                      size: 24,
+                                Container(
+                                  padding: const EdgeInsets.all(3),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.grey,
+                                  ),
+                                  child: Text(
+                                    movie.releaseDate.split("-").first,
+                                    style: const TextStyle(
+                                      fontSize: 14,
                                       color: Colors.white,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      "Watch Movie",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.red,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.play_circle_outline,
+                                            size: 24,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          Text(
+                                            "Watch Movie",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           Row(
                             children: [
@@ -217,7 +223,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 // Mô tả
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: Row(
                     children: [
                       Text(
@@ -233,7 +239,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: ReadMoreText(
                     movie.overview,
                     style: TextStyle(
@@ -244,7 +250,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: FutureBuilder<List<Cast>>(
                     future: castItems,
                     builder: (context, snapshot) {
@@ -263,7 +269,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: Row(
                     children: [
                       Text(
