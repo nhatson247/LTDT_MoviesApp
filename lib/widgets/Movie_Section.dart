@@ -122,7 +122,7 @@ class UpcomingMoviesSection extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            return MovieListUpcoming(context,snapshot);
+            return MovieListUpcoming(context, snapshot);
           } else {
             return Text("Error loading upcoming data ${snapshot.error}");
           }
@@ -133,7 +133,8 @@ class UpcomingMoviesSection extends StatelessWidget {
     );
   }
 
-  Widget MovieListUpcoming(BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
+  Widget MovieListUpcoming(
+      BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       height: MediaQuery.of(context).size.height * 0.25,
@@ -147,6 +148,7 @@ class UpcomingMoviesSection extends StatelessWidget {
     );
   }
 }
+
 
 class UserInfoSection extends StatelessWidget {
   @override
