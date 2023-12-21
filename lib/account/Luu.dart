@@ -12,7 +12,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() async  {
+  void logout() async {
     _loggedInStudent = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('hoten');
@@ -20,6 +20,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void refreshHomePage() {
+    print('refreshHomePage');
     notifyListeners();
   }
 
@@ -28,9 +29,11 @@ class AuthProvider extends ChangeNotifier {
       _loggedInStudent!.hoten = student.hoten;
       _loggedInStudent!.matkhau = student.matkhau;
       _loggedInStudent!.email = student.email;
+
+      print('Thông tin người dùng đã được cập nhật: $_loggedInStudent');
+
       notifyListeners();
     }
   }
-
 }
 

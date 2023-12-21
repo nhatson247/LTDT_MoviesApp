@@ -44,9 +44,9 @@ class _ChangePassState extends State<ChangePass> {
                 children: [
                   buildTitle("Đổi mật khẩu"),
                   const SizedBox(height: 20),
-                  buildTextField(_matkhaucuController, "Mật khẩu cũ", Colors.white, Icons.password, isPassword: true),
-                  buildTextField(_matkhaumoiController, "Mật khẩu mới ", Colors.white, Icons.password, isPassword: true),
-                  buildTextField(_nhaplaimatkhaumoiController, "Nhập lại mật khẩu mới ", Colors.white, Icons.password, isPassword: true),
+                  buildTextField(_matkhaucuController, "Mật khẩu cũ", Colors.white, Icons.lock, isPassword: true),
+                  buildTextField(_matkhaumoiController, "Mật khẩu mới ", Colors.white, Icons.lock_open, isPassword: true),
+                  buildTextField(_nhaplaimatkhaumoiController, "Nhập lại mật khẩu mới ", Colors.white, Icons.lock_open, isPassword: true),
                   const SizedBox(height: 15),
                   buildLoginButton(),
                   const SizedBox(height: 10),
@@ -63,13 +63,13 @@ class _ChangePassState extends State<ChangePass> {
   Widget buildBackButton(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pop(context); // Go back to the previous screen
+        Navigator.pop(context);
       },
       child: Container(
         width: 327,
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.yellow[800], // Choose a color for the back button
+          color: Colors.yellow[800], 
           borderRadius: BorderRadius.circular(15),
         ),
         child: const Center(

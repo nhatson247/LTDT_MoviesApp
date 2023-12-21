@@ -90,4 +90,18 @@ class Api {
       throw Exception("Get Movie Details API error");
     }
   }
+
+  Future<String?> getMovieVideo(int movieId) async {
+    final response = await http.get(Uri.parse(
+        "${Constanst.apiUrl}/movie/$movieId/videos?api_key=${Constanst.apiKey}"));
+
+    if (response.statusCode == 200) {
+      final decodeData = json.decode(response.body)['results'] as List;
+      if (decodeData.isNotEmpty) {
+        return decodeData[0]['key'];
+      }
+    }
+    return null;
+  }
+
 }

@@ -57,6 +57,7 @@ dev_dependencies:
   sqflite_common_ffi_web: ^0.4.0
   email_validator: ^2.1.17
   crypto: ^3.0.3
+  url_launcher: ^6.2.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

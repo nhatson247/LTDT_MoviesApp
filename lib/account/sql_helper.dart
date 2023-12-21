@@ -5,8 +5,7 @@ import 'package:path/path.dart';
 class SQLHelper {
   final databaseName = "taikhoan.db";
 
-  String taiKhoanTable =
-      "create table tai_khoan (masv TEXT PRIMARY KEY, hoten TEXT, matkhau TEXT, email TEXT)";
+  String taiKhoanTable = "create table tai_khoan (masv TEXT PRIMARY KEY, hoten TEXT, matkhau TEXT, email TEXT)";
 
   Future<Database> initDB() async {
     final databasePath = await getDatabasesPath();
@@ -52,5 +51,4 @@ class SQLHelper {
     final Database db = await initDB();
     await db.update('tai_khoan', {'matkhau': newPassword}, where: 'masv = ?', whereArgs: [masv]);
   }
-
 }

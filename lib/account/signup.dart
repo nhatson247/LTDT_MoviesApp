@@ -55,6 +55,8 @@ class _MySignUpState extends State<SignUp> {
                       isPassword: true),
                   const SizedBox(height: 15),
                   buildSignUpButton(),
+                  const SizedBox(height: 10),
+                  buildBackButton(context),
                 ],
               ),
             ),
@@ -92,9 +94,7 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
-  Widget buildTextField(TextEditingController controller, String hintText,
-      Color backgroundColor, IconData iconData,
-      {bool isPassword = false}) {
+  Widget buildTextField(TextEditingController controller, String hintText,Color backgroundColor, IconData iconData, {bool isPassword = false}) {
     return Container(
       width: 327,
       height: 50,
@@ -132,8 +132,7 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
-  Widget buildTextNameField(TextEditingController controller, String hintText,
-      Color backgroundColor, IconData iconData) {
+  Widget buildTextNameField(TextEditingController controller, String hintText,Color backgroundColor, IconData iconData) {
     return Container(
       width: 327,
       height: 50,
@@ -170,8 +169,7 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
-  Widget myEditEmail(TextEditingController controller, String content,
-      Color backgroundcolor, IconData iconData) {
+  Widget myEditEmail(TextEditingController controller, String content, Color backgroundcolor, IconData iconData) {
     return Container(
       width: 327,
       height: 50,
@@ -241,6 +239,28 @@ class _MySignUpState extends State<SignUp> {
     );
   }
 
+  Widget buildBackButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Container(
+        width: 327,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.yellow[800],
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: const Center(
+          child: Text(
+            'Quay lại',
+            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
   String generateMd5(String input) {
     return md5.convert(utf8.encode(input)).toString();
   }
@@ -264,7 +284,7 @@ class _MySignUpState extends State<SignUp> {
             builder: (context) => AlertDialog(
               backgroundColor: Colors.red[800],
               title: const Text(
-                'Mã sinh viên đã tồn tại. Vui lòng chọn mã sinh viên khác.',
+                'Mã sinh viên đã tồn tại.',
                 style: TextStyle(color: Colors.white),
               ),
               actions: [

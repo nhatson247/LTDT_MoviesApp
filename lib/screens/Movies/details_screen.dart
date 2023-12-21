@@ -10,6 +10,7 @@ import 'package:testing/widgets/reviews_and_crew.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../api/constants.dart';
 import '../../models/movie.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Movie movie;
@@ -24,6 +25,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   late Future<List<Cast>> castItems;
   late Future<List<Review>> reviewItems;
   late bool isFavorite;
+  String? videoKey;
 
   @override
   void initState() {
@@ -32,13 +34,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
     reviewItems = Api().getMovieReview(widget.movie.id);
     isFavorite = false;
     checkFavoriteStatus();
+    loadVideoKey();
+  }
+
+  void loadVideoKey() async {
+    try {
+      final key = await Api().getMovieVideo(widget.movie.id);
+      setState(() {
+        videoKey = key;
+      });
+    } catch (e) {
+      print("Error loading video key: $e");
+    }
+  }
+
+  void _openYoutubeVideo(String videoKey) {
+    final youtubeUrl = "https://www.youtube.com/watch?v=$videoKey";
+    launchUrl(Uri.parse(youtubeUrl));
   }
 
   void checkFavoriteStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Set<int> favoriteMovies =
-        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
-            Set<int>();
+        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ?? Set<int>();
     setState(() {
       isFavorite = favoriteMovies.contains(widget.movie.id);
     });
@@ -51,17 +69,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
     });
 
     Set<int> favoriteMovies =
-        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
-            Set<int>();
-
+        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ?? Set<int>();
     if (isFavorite) {
       favoriteMovies.add(widget.movie.id);
     } else {
       favoriteMovies.remove(widget.movie.id);
     }
-
-    prefs.setStringList(
-        'favorites', favoriteMovies.map((id) => id.toString()).toList());
+    prefs.setStringList('favorites', favoriteMovies.map((id) => id.toString()).toList());
   }
 
   @override
@@ -174,20 +188,38 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.play_circle_outline,
-                                            size: 24,
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          Text(
-                                            "Watch Movie",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (videoKey != null) {
+                                                _openYoutubeVideo(videoKey!);
+                                              }
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(3),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(5),
+                                                color: Colors.red,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.play_circle_outline,
+                                                    size: 24,
+                                                    color: Colors.white,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Text(
+                                                    "Watch Movie",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -309,3 +341,5 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 }
+
+
