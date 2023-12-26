@@ -149,6 +149,45 @@ class UpcomingMoviesSection extends StatelessWidget {
   }
 }
 
+class RelatedMoviesSection extends StatelessWidget {
+  final Future<List<Movie>> relatedMovies;
+
+  const RelatedMoviesSection({Key? key, required this.relatedMovies})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Movie>>(
+      future: relatedMovies,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return MovieListUpcoming(context, snapshot);
+          } else {
+            return Text("Error loading Related data ${snapshot.error}");
+          }
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget MovieListUpcoming(
+      BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      height: MediaQuery.of(context).size.height * 0.25,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: snapshot.data?.length ?? 0,
+        itemBuilder: (context, index) {
+          return CustomCard(movie: snapshot.data![index]);
+        },
+      ),
+    );
+  }
+}
 
 class UserInfoSection extends StatelessWidget {
   @override

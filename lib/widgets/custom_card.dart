@@ -27,8 +27,9 @@ class CustomCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image:
-                NetworkImage('${Constanst.imagePath}${movie.backDropPath}'),
+                image: movie.backDropPath != null
+                    ? NetworkImage('${Constanst.imagePath}${movie.backDropPath}')
+                    : AssetImage('background.jpg') as ImageProvider,
                 fit: BoxFit.cover,
               ),
             ),

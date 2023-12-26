@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:testing/api/constants.dart';
 import 'package:testing/models/cast.dart';
 import 'package:testing/models/movie.dart';
 import 'package:http/http.dart' as http;
-
 import '../models/review.dart';
 
 class Api {
@@ -82,12 +80,22 @@ class Api {
     final response = await http.get(
       Uri.parse("${Constanst.apiUrl}/movie/$movieId?api_key=${Constanst.apiKey}"),
     );
-
     if (response.statusCode == 200) {
       final decodeData = json.decode(response.body);
       return Movie.fromJson(decodeData);
     } else {
       throw Exception("Get Movie Details API error");
+    }
+  }
+
+  Future<List<Movie>> getRelatedMovies(int movieId) async {
+    final response = await http.get(Uri.parse(
+        "${Constanst.apiUrl}/movie/$movieId/similar?api_key=${Constanst.apiKey}"));
+    if (response.statusCode == 200) {
+      final decodeData = json.decode(response.body)['results'] as List;
+      return decodeData.map((movie) => Movie.fromJson(movie)).toList();
+    } else {
+      throw Exception("Get Related Movies Api error");
     }
   }
 

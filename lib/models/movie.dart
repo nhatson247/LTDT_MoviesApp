@@ -1,7 +1,7 @@
 class Movie {
   int id;
   String title;
-  String backDropPath;
+  String? backDropPath;
   String originalTitle;
   String overview;
   String posterPath;
@@ -23,7 +23,7 @@ class Movie {
     return Movie(
         id: json["id"],
         title: json["title"] ,
-        backDropPath: json["backdrop_path"] ?? "",
+        backDropPath: json["backdrop_path"] ?? null,
         originalTitle: json["original_title"],
         overview: json["overview"],
         posterPath: json["poster_path"],

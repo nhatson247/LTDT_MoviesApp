@@ -17,8 +17,6 @@ class ReviewCard extends StatelessWidget {
     );
   }
 
-
-
   Widget buildReviewItem(BuildContext context, Review review) {
     return InkWell(
       onTap: () {
@@ -155,7 +153,7 @@ class ReviewCard extends StatelessWidget {
                           image: DecorationImage(
                             image: review.avatarPath != null
                                 ? NetworkImage(
-                                '${Constanst.imagePath}${review.avatarPath}')
+                                    '${Constanst.imagePath}${review.avatarPath}')
                                 : AssetImage('cast.jpg') as ImageProvider,
                             fit: BoxFit.cover,
                           ),
@@ -209,11 +207,21 @@ class ReviewCard extends StatelessWidget {
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 8),
                   Text(
                     "${review.content}",
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
@@ -226,5 +234,4 @@ class ReviewCard extends StatelessWidget {
       },
     );
   }
-
 }

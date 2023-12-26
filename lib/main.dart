@@ -31,8 +31,9 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Movie",
-          home: authProvider.loggedInStudent != null ? HomePage() : Login(),
+          home: authProvider.loggedInStudent != null ? const HomePage() : const Login(),
         );
+
       },
     );
   }
