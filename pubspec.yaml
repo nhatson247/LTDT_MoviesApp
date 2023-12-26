@@ -58,7 +58,6 @@ dev_dependencies:
   email_validator: ^2.1.17
   crypto: ^3.0.3
   url_launcher: ^6.2.2
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

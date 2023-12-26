@@ -69,7 +69,7 @@ class _ChangePassState extends State<ChangePass> {
         width: 327,
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.yellow[800], 
+          color: Colors.yellow[600],
           borderRadius: BorderRadius.circular(15),
         ),
         child: const Center(

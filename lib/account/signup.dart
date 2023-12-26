@@ -27,8 +27,8 @@ class _MySignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration:  BoxDecoration(
+          color: Colors.grey[600],
         ),
         child: Center(
           child: SingleChildScrollView(
