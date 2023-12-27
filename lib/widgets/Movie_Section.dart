@@ -11,7 +11,7 @@ import '../account/changePW.dart';
 
 class TrendingMoviesSection extends StatefulWidget {
   final Future<List<Movie>> trendingMovies;
-  final ValueChanged<int> onPageChanged; // Thêm dòng này
+  final ValueChanged<int> onPageChanged;
 
   const TrendingMoviesSection({Key? key, required this.trendingMovies, required this.onPageChanged})
       : super(key: key);

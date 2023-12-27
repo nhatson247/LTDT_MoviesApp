@@ -14,7 +14,7 @@ class SearchMovies extends StatefulWidget {
 }
 
 class _SearchMoviesState extends State<SearchMovies> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Movie> _searchResults = [];
   bool _isSearching = false; // trang thai tim kiem
   bool _searchComplete = false; // kiem tra da hoan thanh tim kiem chua
@@ -77,9 +77,8 @@ class _SearchMoviesState extends State<SearchMovies> {
   Widget _buildSearchResults() {
     if (_isSearching) {
       if (_searchResults.isEmpty) {
-        // Trường hợp tìm kiếm đã hoàn thành và không có kết quả
         if (_searchComplete) {
-          return Center(
+          return const Center(
             child: Text(
               'No result found',
               style: TextStyle(
@@ -89,7 +88,7 @@ class _SearchMoviesState extends State<SearchMovies> {
             ),
           );
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(), // loading
           );
         }
@@ -139,42 +138,42 @@ class _SearchMoviesState extends State<SearchMovies> {
                                 _searchResults[index].title,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style:const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Row(
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.all(3),
+                                    padding: const EdgeInsets.all(3),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       color: Colors.grey,
                                     ),
                                     child: Text(
                                       _searchResults[index].releaseDate.split("-").first,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 20),
+                                  const SizedBox(width: 20),
                                   Row(
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.star,
                                         size: 18,
                                         color: Colors.redAccent,
                                       ),
                                       Text(
                                         _searchResults[index].voteAverage.toStringAsFixed(1),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -184,14 +183,14 @@ class _SearchMoviesState extends State<SearchMovies> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 _searchResults[index].overview,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white54,
                                 ),
                               ),
@@ -209,7 +208,7 @@ class _SearchMoviesState extends State<SearchMovies> {
       }
     } else {
       // Trường hợp chưa tìm kiếm
-      return Center(
+      return const Center(
         child: Text(
           'Find your movies',
           style: TextStyle(

@@ -20,9 +20,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Widget> _children = [
-    HomeScreen(),
-    SearchMovies(),
-    WatchList(),
+    const HomeScreen(),
+    const SearchMovies(),
+    const WatchList(),
   ];
 
   @override
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         unselectedItemColor: Colors.grey[300],
         selectedItemColor: Colors.red,
         type: BottomNavigationBarType.fixed,
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: "Movies"),
           BottomNavigationBarItem(icon: Icon(Icons.search, size: 30,), label: "Search"),
           BottomNavigationBarItem(icon: Icon(Icons.list_alt, size: 30,), label: "WatchList"),

@@ -72,8 +72,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       isFavorite = !isFavorite;
     });
 
-    Set<int> favoriteMovies =
-        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
+    Set<int> favoriteMovies = prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
             Set<int>();
     if (isFavorite) {
       favoriteMovies.add(widget.movie.id);
