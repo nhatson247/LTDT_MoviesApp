@@ -1,5 +1,3 @@
-
-
 String calculateTimeAgo(DateTime createdAt) {
   final now = DateTime.now();
   final difference = now.difference(createdAt);

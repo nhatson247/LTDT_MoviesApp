@@ -20,7 +20,6 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void refreshHomePage() {
-    print('refreshHomePage');
     notifyListeners();
   }
 
@@ -29,9 +28,6 @@ class AuthProvider extends ChangeNotifier {
       _loggedInStudent!.hoten = student.hoten;
       _loggedInStudent!.matkhau = student.matkhau;
       _loggedInStudent!.email = student.email;
-
-      print('Thông tin người dùng đã được cập nhật: $_loggedInStudent');
-
       notifyListeners();
     }
   }

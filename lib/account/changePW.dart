@@ -243,6 +243,4 @@ class _ChangePassState extends State<ChangePass> {
 
     Provider.of<AuthProvider>(context, listen: false).refreshHomePage();
   }
-
-
 }
