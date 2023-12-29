@@ -122,7 +122,9 @@ class _SearchMoviesState extends State<SearchMovies> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: NetworkImage('${Constanst.imagePath}${_searchResults[index].backDropPath}'),
+                              image: _searchResults[index].backDropPath != null ?
+                              NetworkImage('${Constanst.imagePath}${_searchResults[index].backDropPath}')
+                              : AssetImage("background.jpg") as ImageProvider,
                               fit: BoxFit.cover,
                             ),
                           ),
