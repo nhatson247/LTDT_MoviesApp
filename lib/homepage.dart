@@ -28,20 +28,20 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _children[_selectIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectIndex,
-        onTap: _navigateBottomNavBar,
-        backgroundColor: kColorDF,
-        unselectedItemColor: Colors.grey[300],
-        selectedItemColor: Colors.red,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: "Movies"),
-          BottomNavigationBarItem(icon: Icon(Icons.search, size: 30,), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt, size: 30,), label: "WatchList"),
-        ],
-      )
+        body: _children[_selectIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectIndex,
+          onTap: _navigateBottomNavBar,
+          backgroundColor: kColorDF,
+          unselectedItemColor: Colors.grey[300],
+          selectedItemColor: Colors.red,
+          type: BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: "Movies"),
+            BottomNavigationBarItem(icon: Icon(Icons.search, size: 30,), label: "Search"),
+            BottomNavigationBarItem(icon: Icon(Icons.list_alt, size: 30,), label: "WatchList"),
+          ],
+        ),
     );
   }
 }

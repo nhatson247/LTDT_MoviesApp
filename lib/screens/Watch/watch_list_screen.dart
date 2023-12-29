@@ -51,7 +51,8 @@ class _WatchListState extends State<WatchList> {
         color: kBackgroundColor,
         child: favoriteMovies.isEmpty
             ? Center(
-          child: Text("Favorites list is empty", style:  TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),),
+          child: Text("Favorites list is empty", style: TextStyle(
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),),
         )
             : ListView.builder(
           itemCount: favoriteMovies.length,
@@ -62,9 +63,10 @@ class _WatchListState extends State<WatchList> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DetailsScreen(
-                      movie: movie,
-                    ),
+                    builder: (context) =>
+                        DetailsScreen(
+                          movie: movie,
+                        ),
                   ),
                 );
               },
@@ -128,7 +130,9 @@ class _WatchListState extends State<WatchList> {
                             color: Colors.grey,
                           ),
                           child: Text(
-                            movie.releaseDate.split("-").first,
+                            movie.releaseDate
+                                .split("-")
+                                .first,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white,

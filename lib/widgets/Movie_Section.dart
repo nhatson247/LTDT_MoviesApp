@@ -353,7 +353,7 @@ class UserInfoSection extends StatelessWidget {
       ],
       color: Colors.grey,
     ).then((value) {
-      if (value == 'logout') {
+       if (value == 'logout') {
         Provider.of<AuthProvider>(context, listen: false).logout();
         Navigator.pushReplacement(
           context,

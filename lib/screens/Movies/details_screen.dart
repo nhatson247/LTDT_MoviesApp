@@ -72,7 +72,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
       isFavorite = !isFavorite;
     });
 
-    Set<int> favoriteMovies = prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
+    Set<int> favoriteMovies =
+        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
             Set<int>();
     if (isFavorite) {
       favoriteMovies.add(widget.movie.id);
@@ -343,7 +344,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: Row(
                     children: [
                       Text(
