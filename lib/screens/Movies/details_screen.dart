@@ -9,8 +9,10 @@ import 'package:testing/widgets/Movie_Section.dart';
 import 'package:testing/widgets/cast_and_crew.dart';
 import 'package:testing/widgets/reviews_and_crew.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../account/Luu.dart';
 import '../../api/constants.dart';
 import '../../models/movie.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -57,31 +59,61 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   void checkFavoriteStatus() async {
+    AuthProvider authProvider =
+    Provider.of<AuthProvider>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Set<int> favoriteMovies =
-        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
-            Set<int>();
+    Set<int> favoriteMovies = prefs
+        .getStringList(authProvider.loggedInMasv!)
+        ?.map((id) => int.parse(id))
+        .toSet() ??
+        Set<int>();
+
     setState(() {
       isFavorite = favoriteMovies.contains(widget.movie.id);
     });
   }
 
   void toggleFavorite() async {
+    AuthProvider authProvider =
+    Provider.of<AuthProvider>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Set<int> favoriteMovies = prefs
+        .getStringList(authProvider.loggedInMasv!)
+        ?.map((id) => int.parse(id))
+        .toSet() ??
+        Set<int>();
+
     setState(() {
       isFavorite = !isFavorite;
     });
 
-    Set<int> favoriteMovies =
-        prefs.getStringList('favorites')?.map((id) => int.parse(id)).toSet() ??
-            Set<int>();
     if (isFavorite) {
       favoriteMovies.add(widget.movie.id);
     } else {
       favoriteMovies.remove(widget.movie.id);
     }
-    prefs.setStringList(
-        'favorites', favoriteMovies.map((id) => id.toString()).toList());
+
+    prefs.setStringList(authProvider.loggedInMasv!,
+        favoriteMovies.map((id) => id.toString()).toList());
+    loadFavoriteStatus();
+  }
+
+  void loadFavoriteStatus() async {
+    AuthProvider authProvider =
+    Provider.of<AuthProvider>(context, listen: false);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? favoriteMoviesString =
+    prefs.getStringList(authProvider.loggedInMasv!);
+
+    if (favoriteMoviesString != null) {
+      Set<int> favoriteMovies =
+      favoriteMoviesString.map((id) => int.parse(id)).toSet();
+
+      setState(() {
+        isFavorite = favoriteMovies.contains(widget.movie.id);
+      });
+    }
   }
 
   @override
@@ -142,7 +174,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               [
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -203,7 +235,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               padding: const EdgeInsets.all(3),
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(5),
+                                                BorderRadius.circular(5),
                                                 color: Colors.red,
                                               ),
                                               child: Row(
@@ -222,7 +254,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                       fontSize: 14,
                                                       color: Colors.white,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
                                                     ),
                                                   ),
                                                 ],
@@ -262,7 +294,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 // Mô tả
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: Row(
                     children: [
                       Text(
@@ -278,7 +310,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: ReadMoreText(
                     movie.overview,
                     colorClickableText: Colors.redAccent,
@@ -291,7 +323,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: FutureBuilder<List<Cast>>(
                     future: castItems,
                     builder: (context, snapshot) {
@@ -310,7 +342,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: Row(
                     children: [
                       Text(
@@ -345,7 +377,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: Row(
                     children: [
                       Text(

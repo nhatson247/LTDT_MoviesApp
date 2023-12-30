@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testing/api/api.dart';
 import 'package:testing/api/constants.dart';
-
+import 'package:provider/provider.dart';
+import '../../account/Luu.dart';
 import '../../models/movie.dart';
 import '../../utils/colors.dart';
 import '../Movies/details_screen.dart';
@@ -16,6 +17,7 @@ class WatchList extends StatefulWidget {
 
 class _WatchListState extends State<WatchList> {
   List<Movie> favoriteMovies = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -24,21 +26,27 @@ class _WatchListState extends State<WatchList> {
   }
 
   void loadFavoriteMovies() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? favoriteMoviesString = prefs.getStringList('favorites');
-    if (favoriteMoviesString != null) {
-      List<int> favoriteMovieIds =
-      favoriteMoviesString.map((id) => int.parse(id)).toList();
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-      List<Movie> movies = await Future.wait(
-        favoriteMovieIds.map((id) => Api().getMovieDetails(id)),
-      );
+    if (authProvider.loggedInMasv != null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      Set<String>? favoriteMoviesStringSet = prefs.getStringList(authProvider.loggedInMasv!)?.toSet();
 
-      setState(() {
-        favoriteMovies = movies;
-      });
+      if (favoriteMoviesStringSet != null) {
+        Set<int> favoriteMovieIds = favoriteMoviesStringSet.map((id) => int.parse(id)).toSet();
+
+        List<Movie> movies = await Future.wait(
+          favoriteMovieIds.map((id) => Api().getMovieDetails(id)),
+        );
+
+        setState(() {
+          favoriteMovies = movies;
+          isLoading = false;
+        });
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +54,13 @@ class _WatchListState extends State<WatchList> {
       appBar: AppBar(
         backgroundColor: kBackgroundColor,
         title: Text("WatchList"),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         color: kBackgroundColor,
         child: favoriteMovies.isEmpty
             ? Center(
-          child: Text("Favorites list is empty", style: TextStyle(
-              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),),
+          child: Text("Favorites list is empty", style:  TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),),
         )
             : ListView.builder(
           itemCount: favoriteMovies.length,
@@ -63,10 +71,9 @@ class _WatchListState extends State<WatchList> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        DetailsScreen(
-                          movie: movie,
-                        ),
+                    builder: (context) => DetailsScreen(
+                      movie: movie,
+                    ),
                   ),
                 );
               },
@@ -130,9 +137,7 @@ class _WatchListState extends State<WatchList> {
                             color: Colors.grey,
                           ),
                           child: Text(
-                            movie.releaseDate
-                                .split("-")
-                                .first,
+                            movie.releaseDate.split("-").first,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white,
